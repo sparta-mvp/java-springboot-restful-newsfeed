@@ -60,4 +60,9 @@ public class UserController {
     public ResponseEntity<Response<UserResponseDto>> getUser(@PathVariable Long id) {
         return ResponseEntity.ok(Response.of(userService.getUserById(id)));
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<Response<UserResponseDto>> getProfile(@Login LoginUser loginUser) {
+        return ResponseEntity.ok(Response.of(userService.getUserById(loginUser.getUserId())));
+    }
 }
