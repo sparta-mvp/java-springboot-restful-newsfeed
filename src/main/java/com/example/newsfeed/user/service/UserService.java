@@ -120,6 +120,7 @@ public class UserService {
 
     }
 
+    @Transactional(readOnly = true)
     public UserResponseDto getUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
         if (user.isDeactivated()) {

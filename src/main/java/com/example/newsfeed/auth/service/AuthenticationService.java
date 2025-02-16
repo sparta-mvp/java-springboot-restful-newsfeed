@@ -4,7 +4,6 @@ import com.example.newsfeed.auth.dto.LoginUser;
 import com.example.newsfeed.auth.exception.LoginFailedException;
 import com.example.newsfeed.common.config.PasswordEncoder;
 import com.example.newsfeed.user.entity.User;
-import com.example.newsfeed.user.entity.UserStatus;
 import com.example.newsfeed.user.exception.DeActivatedUserException;
 import com.example.newsfeed.user.exception.UserNotFoundException;
 import com.example.newsfeed.user.service.UserService;
