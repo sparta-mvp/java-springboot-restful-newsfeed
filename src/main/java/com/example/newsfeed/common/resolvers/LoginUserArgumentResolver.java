@@ -1,7 +1,6 @@
 package com.example.newsfeed.common.resolvers;
 
 import com.example.newsfeed.auth.dto.LoginUser;
-import com.example.newsfeed.auth.exception.UnAuthorizedAccessException;
 import com.example.newsfeed.auth.exception.UnAuthorizedException;
 import com.example.newsfeed.common.constant.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
