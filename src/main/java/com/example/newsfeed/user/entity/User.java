@@ -47,6 +47,7 @@ public class User {
 
 
     public void deActivate() {
+        this.name = "탈퇴한 회원";
         this.status = UserStatus.DEACTIVATED;
     }
 
