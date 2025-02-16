@@ -73,7 +73,7 @@ public class UserService {
 
         User user = userRepository.findById(loginUser.getUserId()).orElseThrow(() -> new UserNotFoundException());
 
-        if (user.getStatus() == UserStatus.DEACTIVATED) {
+        if (user.isDeactivated()) {
             throw new DeActivatedUserException();
         }
 

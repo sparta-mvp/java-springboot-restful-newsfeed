@@ -58,4 +58,8 @@ public class User {
     public void updatePassword(String newPassword) {
         this.password = newPassword;
     }
+
+    public boolean isDeactivated() {
+        return this.status == UserStatus.DEACTIVATED;
+    }
 }

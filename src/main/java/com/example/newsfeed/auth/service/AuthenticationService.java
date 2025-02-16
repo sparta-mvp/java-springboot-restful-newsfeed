@@ -22,9 +22,11 @@ public class AuthenticationService {
     @Transactional(readOnly = true)
     public LoginUser login(String email, String password) {
         User user = getUserOrThrow(email);
-        if (user.getStatus() == UserStatus.DEACTIVATED) {
+
+        if (user.isDeactivated()) {
             throw new DeActivatedUserException();
         }
+
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new LoginFailedException();
         }
