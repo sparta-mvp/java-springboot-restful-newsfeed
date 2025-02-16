@@ -29,4 +29,14 @@ public class AuthenticationController {
         session.setAttribute(SessionConst.LOGIN_USER, loginUser);
         return ResponseEntity.ok(MessageResponse.of("로그인 성공했습니다."));
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<MessageResponse> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        return ResponseEntity.ok(MessageResponse.of("로그아웃 성공했습니다."));
+    }
 }
