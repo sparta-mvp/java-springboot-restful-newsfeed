@@ -13,7 +13,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,30 +27,30 @@ public class MeController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<Response<UserResponse>> getProfile(@Login LoginUser loginUser) {
-        return ResponseEntity.ok(Response.of(userService.getUser(loginUser.getUserId())));
+    public Response<UserResponse> getProfile(@Login LoginUser loginUser) {
+        return Response.of(userService.getUser(loginUser.getUserId()));
     }
 
     @PatchMapping
-    public ResponseEntity<MessageResponse> updateProfile(@Login LoginUser loginUser, @RequestBody UserRequest requestDto) {
+    public MessageResponse updateProfile(@Login LoginUser loginUser, @RequestBody UserRequest requestDto) {
         userService.updateUser(loginUser, requestDto);
-        return ResponseEntity.ok(MessageResponse.of("회원 정보가 수정되었습니다."));
+        return MessageResponse.of("회원 정보가 수정되었습니다.");
     }
 
     @PatchMapping("/password")
-    public ResponseEntity<MessageResponse> updatePassword(@Login LoginUser loginUser, @RequestBody @Valid PasswordUpdateRequest requestDto) {
+    public MessageResponse updatePassword(@Login LoginUser loginUser, @RequestBody @Valid PasswordUpdateRequest requestDto) {
         userService.updatePassword(loginUser, requestDto);
 
-        return ResponseEntity.ok(MessageResponse.of("비밀번호 변경 성공했습니다."));
+        return MessageResponse.of("비밀번호 변경 성공했습니다.");
     }
 
     @PostMapping("/withdraw")
-    public ResponseEntity<MessageResponse> withdraw(@Login LoginUser loginUser, @RequestBody @Valid WithdrawRequest requestDto, HttpServletRequest request) {
+    public MessageResponse withdraw(@Login LoginUser loginUser, @RequestBody @Valid WithdrawRequest requestDto, HttpServletRequest request) {
         userService.withdraw(loginUser, requestDto.getPassword());
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }
-        return ResponseEntity.ok(MessageResponse.of("회원탈퇴 성공했습니다."));
+        return MessageResponse.of("회원탈퇴 성공했습니다.");
     }
 }

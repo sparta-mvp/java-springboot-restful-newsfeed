@@ -7,8 +7,6 @@ import com.example.newsfeed.user.dto.UserResponse;
 import com.example.newsfeed.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,15 +22,15 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<MessageResponse> signup(@RequestBody @Valid SignupRequest requestDto) {
+    public MessageResponse signup(@RequestBody @Valid SignupRequest requestDto) {
 
         userService.signup(requestDto);
-        return new ResponseEntity<>(MessageResponse.of("회원가입이 성공하였습니다."), HttpStatus.CREATED);
+        return MessageResponse.of("회원가입이 성공하였습니다.");
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Response<UserResponse>> getUser(@PathVariable Long id) {
-        return ResponseEntity.ok(Response.of(userService.getUser(id)));
+    public Response<UserResponse> getUser(@PathVariable Long id) {
+        return Response.of(userService.getUser(id));
     }
 
 

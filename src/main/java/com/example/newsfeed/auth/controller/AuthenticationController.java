@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,20 +22,20 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    public ResponseEntity<MessageResponse> login(@RequestBody @Valid LoginRequest requestDto, HttpServletRequest request) {
+    public MessageResponse login(@RequestBody @Valid LoginRequest requestDto, HttpServletRequest request) {
         LoginUser loginUser = authenticationService.login(requestDto.getEmail(), requestDto.getPassword());
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_USER, loginUser);
-        return ResponseEntity.ok(MessageResponse.of("로그인 성공했습니다."));
+        return MessageResponse.of("로그인 성공했습니다.");
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<MessageResponse> logout(HttpServletRequest request) {
+    public MessageResponse logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }
 
-        return ResponseEntity.ok(MessageResponse.of("로그아웃 성공했습니다."));
+        return MessageResponse.of("로그아웃 성공했습니다.");
     }
 }
