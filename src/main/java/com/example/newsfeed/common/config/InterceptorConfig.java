@@ -16,6 +16,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginInterceptor)
                 .addPathPatterns("/api/v1/users/me/**")
+                .addPathPatterns("/api/v1/posts/**")
+                .addPathPatterns("/api/v1/comments/**")
                 .addPathPatterns("/api/v1/auth/logout")
                 .order(1);
     }
