@@ -3,6 +3,7 @@ package com.example.newsfeed.user.controller;
 import com.example.newsfeed.auth.dto.LoginUser;
 import com.example.newsfeed.common.resolvers.Login;
 import com.example.newsfeed.common.response.MessageResponse;
+import com.example.newsfeed.user.dto.PasswordUpdateRequestDto;
 import com.example.newsfeed.user.dto.SignupRequestDto;
 import com.example.newsfeed.user.dto.WithdrawRequestDto;
 import com.example.newsfeed.user.service.UserService;
@@ -10,7 +11,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,6 +36,13 @@ public class UserController {
     public ResponseEntity<MessageResponse> withdraw(@Login LoginUser loginUser, @RequestBody @Valid WithdrawRequestDto requestDto) {
         userService.withdraw(loginUser, requestDto.getPassword());
         return ResponseEntity.ok(MessageResponse.of("회원탈퇴 성공했습니다."));
+    }
+
+    @PatchMapping("/password")
+    public ResponseEntity<MessageResponse> updatePassword(@Login LoginUser loginUser,@RequestBody @Valid PasswordUpdateRequestDto requestDto) {
+        userService.updatePassword(loginUser, requestDto);
+
+        return ResponseEntity.ok(MessageResponse.of("비밀번호 변경 성공했습니다."));
     }
 
 

@@ -9,6 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 
 @Getter
@@ -51,5 +53,9 @@ public class User {
     @PrePersist
     protected void prePersist() {
         this.status = UserStatus.ACTIVE;
+    }
+
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
     }
 }
