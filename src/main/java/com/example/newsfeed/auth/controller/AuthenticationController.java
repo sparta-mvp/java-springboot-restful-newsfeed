@@ -1,6 +1,6 @@
 package com.example.newsfeed.auth.controller;
 
-import com.example.newsfeed.auth.dto.LoginRequestDto;
+import com.example.newsfeed.auth.dto.LoginRequest;
 import com.example.newsfeed.auth.dto.LoginUser;
 import com.example.newsfeed.auth.service.AuthenticationService;
 import com.example.newsfeed.common.constant.SessionConst;
@@ -23,7 +23,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    public ResponseEntity<MessageResponse> login(@RequestBody @Valid LoginRequestDto requestDto, HttpServletRequest request) {
+    public ResponseEntity<MessageResponse> login(@RequestBody @Valid LoginRequest requestDto, HttpServletRequest request) {
         LoginUser loginUser = authenticationService.login(requestDto.getEmail(), requestDto.getPassword());
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_USER, loginUser);

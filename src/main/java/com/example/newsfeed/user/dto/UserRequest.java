@@ -5,7 +5,7 @@ import com.example.newsfeed.user.entity.InterestTag;
 import lombok.Getter;
 
 @Getter
-public class UserUpdateRequestDto {
+public class UserRequest {
 
     private String name;
 

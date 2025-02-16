@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
-public class WithdrawRequestDto {
+public class WithdrawRequest {
 
 
     @NotBlank(message = "비밀번호를 입력해야 합니다.")

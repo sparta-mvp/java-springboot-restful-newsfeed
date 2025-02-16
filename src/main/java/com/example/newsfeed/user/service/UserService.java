@@ -4,10 +4,10 @@ import com.example.newsfeed.auth.dto.LoginUser;
 import com.example.newsfeed.common.config.PasswordEncoder;
 import com.example.newsfeed.common.exception.ErrorCode;
 import com.example.newsfeed.common.exception.ValidationException;
-import com.example.newsfeed.user.dto.PasswordUpdateRequestDto;
-import com.example.newsfeed.user.dto.SignupRequestDto;
-import com.example.newsfeed.user.dto.UserResponseDto;
-import com.example.newsfeed.user.dto.UserUpdateRequestDto;
+import com.example.newsfeed.user.dto.PasswordUpdateRequest;
+import com.example.newsfeed.user.dto.SignupRequest;
+import com.example.newsfeed.user.dto.UserResponse;
+import com.example.newsfeed.user.dto.UserRequest;
 import com.example.newsfeed.user.entity.InterestTag;
 import com.example.newsfeed.user.entity.User;
 import com.example.newsfeed.user.exception.DuplicateUserException;
@@ -33,7 +33,7 @@ public class UserService {
 
 
     @Transactional
-    public void signup(SignupRequestDto requestDto) {
+    public void signup(SignupRequest requestDto) {
         if (!isMatchingPassword(requestDto.getPassword(), requestDto.getPasswordCheck())) {
             throw new ValidationException(PASSWORD_CHECK_MISMATCH);
         }
@@ -65,7 +65,7 @@ public class UserService {
 
 
     @Transactional
-    public void updatePassword(LoginUser loginUser,PasswordUpdateRequestDto requestDto) {
+    public void updatePassword(LoginUser loginUser, PasswordUpdateRequest requestDto) {
 
         User user = userFinder.findActive(loginUser.getUserId());
 
@@ -89,7 +89,7 @@ public class UserService {
 
 
     @Transactional
-    public void updateUser(LoginUser loginUser, UserUpdateRequestDto requestDto) {
+    public void updateUser(LoginUser loginUser, UserRequest requestDto) {
         User user = userFinder.findActive(loginUser.getUserId());
 
         if (!StringUtils.hasText(requestDto.getInterestTag()) && !StringUtils.hasText(requestDto.getName())) {
@@ -108,10 +108,10 @@ public class UserService {
 
     }
 
-    public UserResponseDto getUser(Long id) {
+    public UserResponse getUser(Long id) {
         User user = userFinder.findActive(id);
 
-        return UserResponseDto.from(user);
+        return UserResponse.from(user);
     }
 
     private boolean isMatchingPassword(String password, String passwordCheck) {
