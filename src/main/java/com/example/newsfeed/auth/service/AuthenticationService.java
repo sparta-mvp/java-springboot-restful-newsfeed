@@ -4,6 +4,8 @@ import com.example.newsfeed.auth.dto.LoginUser;
 import com.example.newsfeed.auth.exception.LoginFailedException;
 import com.example.newsfeed.common.config.PasswordEncoder;
 import com.example.newsfeed.user.entity.User;
+import com.example.newsfeed.user.entity.UserStatus;
+import com.example.newsfeed.user.exception.DeActivatedUserException;
 import com.example.newsfeed.user.exception.UserNotFoundException;
 import com.example.newsfeed.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +22,9 @@ public class AuthenticationService {
     @Transactional(readOnly = true)
     public LoginUser login(String email, String password) {
         User user = getUserOrThrow(email);
-
+        if (user.getStatus() == UserStatus.DEACTIVATED) {
+            throw new DeActivatedUserException();
+        }
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new LoginFailedException();
         }
