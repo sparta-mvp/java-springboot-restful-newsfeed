@@ -1,6 +1,7 @@
 package com.example.newsfeed.common.interceptor;
 
 import com.example.newsfeed.auth.exception.UnAuthorizedAccessException;
+import com.example.newsfeed.auth.exception.UnAuthorizedException;
 import com.example.newsfeed.common.constant.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,7 +16,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute(SessionConst.LOGIN_USER) == null) {
-            throw new UnAuthorizedAccessException();
+            throw new UnAuthorizedException();
         }
 
         return true;
