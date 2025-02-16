@@ -16,4 +16,11 @@ public class NewsfeedAppException extends RuntimeException {
         this.message = errorCode.getDefaultMessage();
         this.code = errorCode.getCode();
     }
+
+    public NewsfeedAppException(ErrorCode errorCode, Throwable cause) {
+        super(errorCode.getDefaultMessage(), cause);
+        this.status = errorCode.getStatus();
+        this.message = errorCode.getDefaultMessage();
+        this.code = errorCode.getCode();
+    }
 }
