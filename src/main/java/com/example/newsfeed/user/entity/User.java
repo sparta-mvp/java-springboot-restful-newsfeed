@@ -41,10 +41,15 @@ public class User {
         this.interestTag = interestTag;
     }
 
+
+
+
+    public void deActivate() {
+        this.status = UserStatus.DEACTIVATED;
+    }
+
     @PrePersist
     protected void prePersist() {
         this.status = UserStatus.ACTIVE;
     }
-
-
 }
