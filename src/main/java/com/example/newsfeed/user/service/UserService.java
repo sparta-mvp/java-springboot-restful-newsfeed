@@ -10,18 +10,15 @@ import com.example.newsfeed.user.dto.UserResponseDto;
 import com.example.newsfeed.user.dto.UserUpdateRequestDto;
 import com.example.newsfeed.user.entity.InterestTag;
 import com.example.newsfeed.user.entity.User;
-import com.example.newsfeed.user.entity.UserStatus;
-import com.example.newsfeed.user.exception.DeActivatedUserException;
 import com.example.newsfeed.user.exception.DuplicateUserException;
 import com.example.newsfeed.user.exception.InvalidPasswordException;
-import com.example.newsfeed.user.exception.UserNotFoundException;
-import com.example.newsfeed.user.repository.UserRepository;
+import com.example.newsfeed.user.service.component.UserFinder;
+import com.example.newsfeed.user.service.component.UserReader;
+import com.example.newsfeed.user.service.component.UserWriter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
-import java.util.Optional;
 
 import static com.example.newsfeed.common.exception.ErrorCode.PASSWORD_CHECK_MISMATCH;
 
@@ -29,7 +26,9 @@ import static com.example.newsfeed.common.exception.ErrorCode.PASSWORD_CHECK_MIS
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
+    private final UserReader userReader;
+    private final UserWriter userWriter;
+    private final UserFinder userFinder;
     private final PasswordEncoder passwordEncoder;
 
 
@@ -41,24 +40,20 @@ public class UserService {
 
         InterestTag interestTag = InterestTag.of(requestDto.getInterestTag());
 
-        if (userRepository.existsByEmail(requestDto.getEmail())){
+        if (userReader.exists(requestDto.getEmail())){
             throw new DuplicateUserException();
         }
 
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
 
-        User user = new User(requestDto.getName(),encodedPassword, requestDto.getEmail(),interestTag);
-        userRepository.save(user);
-    }
 
-    @Transactional(readOnly = true)
-    public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(()-> new UserNotFoundException());
+        userWriter.create(requestDto.getName(), encodedPassword, requestDto.getEmail(), interestTag);
+
     }
 
     @Transactional
     public void withdraw(LoginUser loginUser,  String password) {
-        User user = userRepository.findById(loginUser.getUserId()).orElseThrow(() -> new UserNotFoundException());
+        User user = userFinder.findActive(loginUser.getUserId());
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new InvalidPasswordException();
@@ -72,20 +67,17 @@ public class UserService {
     @Transactional
     public void updatePassword(LoginUser loginUser,PasswordUpdateRequestDto requestDto) {
 
+        User user = userFinder.findActive(loginUser.getUserId());
 
         if (!isMatchingPassword(requestDto.getNewPassword(), requestDto.getNewPasswordCheck())) {
             throw new ValidationException(PASSWORD_CHECK_MISMATCH);
         }
 
-        User user = userRepository.findById(loginUser.getUserId()).orElseThrow(() -> new UserNotFoundException());
-
-        if (user.isDeactivated()) {
-            throw new DeActivatedUserException();
-        }
-
         if (!passwordEncoder.matches(requestDto.getOldPassword(), user.getPassword())) {
             throw new InvalidPasswordException();
         }
+
+
 
         String encodedPassword = passwordEncoder.encode(requestDto.getNewPassword());
 
@@ -98,11 +90,7 @@ public class UserService {
 
     @Transactional
     public void updateUser(LoginUser loginUser, UserUpdateRequestDto requestDto) {
-        User user = userRepository.findById(loginUser.getUserId()).orElseThrow(() -> new UserNotFoundException());
-
-        if (user.isDeactivated()) {
-            throw new DeActivatedUserException();
-        }
+        User user = userFinder.findActive(loginUser.getUserId());
 
         if (!StringUtils.hasText(requestDto.getInterestTag()) && !StringUtils.hasText(requestDto.getName())) {
             throw new ValidationException(ErrorCode.NO_CHANGES_PROVIDED);
@@ -120,12 +108,8 @@ public class UserService {
 
     }
 
-    @Transactional(readOnly = true)
-    public UserResponseDto getUserById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
-        if (user.isDeactivated()) {
-            throw new DeActivatedUserException();
-        }
+    public UserResponseDto getUser(Long id) {
+        User user = userFinder.findActive(id);
 
         return UserResponseDto.from(user);
     }
