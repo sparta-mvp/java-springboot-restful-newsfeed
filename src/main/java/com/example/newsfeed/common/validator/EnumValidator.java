@@ -17,10 +17,9 @@ public class EnumValidator implements ConstraintValidator<EnumValid, String> {
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
-        if (!StringUtils.hasText(value)) {
-            return false;
+        if (StringUtils.hasText(value)) {
+            return Arrays.stream(enumValues).anyMatch(anEnum -> anEnum.name().equals(value));
         }
-
-        return Arrays.stream(enumValues).anyMatch(anEnum -> anEnum.name().equals(value));
+        return true;
     }
 }

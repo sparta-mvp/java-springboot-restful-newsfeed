@@ -2,9 +2,12 @@ package com.example.newsfeed.user.service;
 
 import com.example.newsfeed.auth.dto.LoginUser;
 import com.example.newsfeed.common.config.PasswordEncoder;
+import com.example.newsfeed.common.exception.ErrorCode;
 import com.example.newsfeed.common.exception.ValidationException;
 import com.example.newsfeed.user.dto.PasswordUpdateRequestDto;
 import com.example.newsfeed.user.dto.SignupRequestDto;
+import com.example.newsfeed.user.dto.UserResponseDto;
+import com.example.newsfeed.user.dto.UserUpdateRequestDto;
 import com.example.newsfeed.user.entity.InterestTag;
 import com.example.newsfeed.user.entity.User;
 import com.example.newsfeed.user.entity.UserStatus;
@@ -16,6 +19,9 @@ import com.example.newsfeed.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import java.util.Optional;
 
 import static com.example.newsfeed.common.exception.ErrorCode.PASSWORD_CHECK_MISMATCH;
 
@@ -88,7 +94,43 @@ public class UserService {
     }
 
 
+
+
+    @Transactional
+    public void updateUser(LoginUser loginUser, UserUpdateRequestDto requestDto) {
+        User user = userRepository.findById(loginUser.getUserId()).orElseThrow(() -> new UserNotFoundException());
+
+        if (user.isDeactivated()) {
+            throw new DeActivatedUserException();
+        }
+
+        if (!StringUtils.hasText(requestDto.getInterestTag()) && !StringUtils.hasText(requestDto.getName())) {
+            throw new ValidationException(ErrorCode.NO_CHANGES_PROVIDED);
+        }
+
+        if (StringUtils.hasText(requestDto.getInterestTag())) {
+            InterestTag interestTag = InterestTag.of(requestDto.getInterestTag());
+            user.updateInterestTag(interestTag);
+        }
+
+        if (StringUtils.hasText(requestDto.getName())) {
+            user.updateName(requestDto.getName());
+        }
+
+
+    }
+
+    public UserResponseDto getUserById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
+        if (user.isDeactivated()) {
+            throw new DeActivatedUserException();
+        }
+
+        return UserResponseDto.from(user);
+    }
+
     private boolean isMatchingPassword(String password, String passwordCheck) {
         return password != null && password.equals(passwordCheck);
     }
+
 }

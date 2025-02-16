@@ -62,4 +62,12 @@ public class User {
     public boolean isDeactivated() {
         return this.status == UserStatus.DEACTIVATED;
     }
+
+    public void updateInterestTag(InterestTag interestTag) {
+        this.interestTag = interestTag;
+    }
+
+    public void updateName(String name) {
+        this.name = name;
+    }
 }

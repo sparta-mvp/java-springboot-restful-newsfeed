@@ -17,7 +17,8 @@ public enum ErrorCode {
     PASSWORD_CHECK_MISMATCH(HttpStatus.BAD_REQUEST,"PASSWORD_CHECK_MISMATCH","비밀번호와 비밀번호 확인이 일치하지 않습니다."),
     INVALID_INTEREST_TAG(HttpStatus.BAD_REQUEST,"INVALID_INTEREST_TAG", "유효하지 않은 관심 태그입니다."),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED,"UNAUTHORIZED","로그인이 필요합니다."),
-    DEACTIVATED_USER(HttpStatus.FORBIDDEN,"DEACTIVATED_USER","이미 탈퇴한 회원입니다." );
+    DEACTIVATED_USER(HttpStatus.FORBIDDEN,"DEACTIVATED_USER","이미 탈퇴한 회원입니다." ),
+    NO_CHANGES_PROVIDED(HttpStatus.BAD_REQUEST,"NO_CHANGES_PROVIDED","변경할 정보가 없습니다.");
 
     private final HttpStatus status;
     private final String code;
