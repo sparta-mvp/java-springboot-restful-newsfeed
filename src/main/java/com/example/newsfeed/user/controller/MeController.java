@@ -9,6 +9,8 @@ import com.example.newsfeed.user.dto.UserResponseDto;
 import com.example.newsfeed.user.dto.UserUpdateRequestDto;
 import com.example.newsfeed.user.dto.WithdrawRequestDto;
 import com.example.newsfeed.user.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +29,7 @@ public class MeController {
 
     @GetMapping
     public ResponseEntity<Response<UserResponseDto>> getProfile(@Login LoginUser loginUser) {
-        return ResponseEntity.ok(Response.of(userService.getUserById(loginUser.getUserId())));
+        return ResponseEntity.ok(Response.of(userService.getUser(loginUser.getUserId())));
     }
 
     @PatchMapping
@@ -44,8 +46,12 @@ public class MeController {
     }
 
     @PostMapping("/withdraw")
-    public ResponseEntity<MessageResponse> withdraw(@Login LoginUser loginUser, @RequestBody @Valid WithdrawRequestDto requestDto) {
+    public ResponseEntity<MessageResponse> withdraw(@Login LoginUser loginUser, @RequestBody @Valid WithdrawRequestDto requestDto, HttpServletRequest request) {
         userService.withdraw(loginUser, requestDto.getPassword());
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
         return ResponseEntity.ok(MessageResponse.of("회원탈퇴 성공했습니다."));
     }
 }
