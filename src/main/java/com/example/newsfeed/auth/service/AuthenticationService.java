@@ -25,7 +25,7 @@ public class AuthenticationService {
             throw new LoginFailedException();
         }
 
-        return LoginUser.of(user.getEmail(), user.getName());
+        return LoginUser.of(user.getId(), user.getName());
 
     }
 

@@ -2,7 +2,6 @@ package com.example.newsfeed.user.service;
 
 import com.example.newsfeed.auth.dto.LoginUser;
 import com.example.newsfeed.common.config.PasswordEncoder;
-import com.example.newsfeed.common.exception.ErrorCode;
 import com.example.newsfeed.common.exception.ValidationException;
 import com.example.newsfeed.user.dto.PasswordUpdateRequestDto;
 import com.example.newsfeed.user.dto.SignupRequestDto;
@@ -14,7 +13,6 @@ import com.example.newsfeed.user.exception.DuplicateUserException;
 import com.example.newsfeed.user.exception.InvalidPasswordException;
 import com.example.newsfeed.user.exception.UserNotFoundException;
 import com.example.newsfeed.user.repository.UserRepository;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,7 +52,7 @@ public class UserService {
 
     @Transactional
     public void withdraw(LoginUser loginUser,  String password) {
-        User user = userRepository.findByEmail(loginUser.getEmail()).orElseThrow(() -> new UserNotFoundException());
+        User user = userRepository.findById(loginUser.getUserId()).orElseThrow(() -> new UserNotFoundException());
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new InvalidPasswordException();
@@ -73,7 +71,7 @@ public class UserService {
             throw new ValidationException(PASSWORD_CHECK_MISMATCH);
         }
 
-        User user = userRepository.findByEmail(loginUser.getEmail()).orElseThrow(() -> new UserNotFoundException());
+        User user = userRepository.findById(loginUser.getUserId()).orElseThrow(() -> new UserNotFoundException());
 
         if (user.getStatus() == UserStatus.DEACTIVATED) {
             throw new DeActivatedUserException();

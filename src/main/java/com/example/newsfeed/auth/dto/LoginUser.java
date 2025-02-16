@@ -5,16 +5,16 @@ import lombok.Getter;
 @Getter
 public class LoginUser {
 
-    private final String email;
+    private final Long userId;
     private final String name;
 
-    private LoginUser(String email, String name) {
-        this.email = email;
+    private LoginUser(Long userId, String name) {
+        this.userId = userId;
         this.name = name;
     }
 
-    public static LoginUser of(String email, String name) {
-        return new LoginUser(email, name);
+    public static LoginUser of(Long userId, String name) {
+        return new LoginUser(userId, name);
     }
 
 }
