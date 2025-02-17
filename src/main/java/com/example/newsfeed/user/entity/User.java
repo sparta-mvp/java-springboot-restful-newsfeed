@@ -19,7 +19,8 @@ import lombok.Getter;
 @Table(name = "users")
 public class User extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
     private String name;
@@ -43,8 +44,6 @@ public class User extends BaseEntity {
         this.email = email;
         this.interestTag = interestTag;
     }
-
-
 
 
     public void deActivate() {
@@ -71,5 +70,9 @@ public class User extends BaseEntity {
 
     public void updateName(String name) {
         this.name = name;
+    }
+
+    public boolean isSame(Long login) {
+        return this.id == login;
     }
 }
