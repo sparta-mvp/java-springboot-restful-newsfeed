@@ -32,11 +32,11 @@ public class CommentService {
         return CommentResponseDto.toDto(save);
     }
 
-    public List<CommentResponseDto> findByPostIdToComments(Long postId, int page) {
+    public Page<CommentResponseDto> findByPostIdToComments(Long postId, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE);
         Page<Comment> commentList = commentRepository.findByPostId(postId, pageable);
 
-        return commentList.stream().map(CommentResponseDto::toDto).toList();
+        return commentList.map(CommentResponseDto::toDto);
     }
 
 

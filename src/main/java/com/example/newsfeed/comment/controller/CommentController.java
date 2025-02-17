@@ -7,6 +7,7 @@ import com.example.newsfeed.common.response.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,10 +35,10 @@ public class CommentController {
 
     //TODO: 페이징 관련 사용 확인 -> fromPage() 사용x
     @GetMapping("/post/{postId}/comments")
-    public ResponseEntity<List<CommentResponseDto>> findByPostIdToComments(@PathVariable Long postId,
+    public ResponseEntity<Response<CommentResponseDto>> findByPostIdToComments(@PathVariable Long postId,
                                                                                      @RequestParam(required = false, defaultValue = "0", value = "page") int page){
-        List<CommentResponseDto> commentsList = commentService.findByPostIdToComments(postId, page);
-        return new ResponseEntity<>(commentsList, HttpStatus.OK);
+        Page<CommentResponseDto> commentsList = commentService.findByPostIdToComments(postId, page);
+        return new ResponseEntity<>(Response.fromPage(commentsList), HttpStatus.OK);
     }
 
 
