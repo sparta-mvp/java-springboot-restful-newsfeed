@@ -4,6 +4,9 @@ import com.example.newsfeed.post.dto.PostRequest;
 import com.example.newsfeed.post.dto.PostResponse;
 import com.example.newsfeed.post.entity.Post;
 import com.example.newsfeed.post.repository.PostRepository;
+import com.example.newsfeed.user.entity.User;
+import com.example.newsfeed.user.service.component.UserFinder;
+import com.example.newsfeed.user.service.component.UserReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,12 +24,12 @@ public class PostServiceImpl implements PostService {
     public PostResponse save(Long userId, String title, String contents, String keywords) {
         Post post = new Post(title, contents, keywords);
 
-        User user = userFidner(userId);
+        User user = userFinder.findActive(userId);
 
         post.setUser(user);
 
         Post saved = postRepository.save(post);
-        return new PostRequest(post.getTitle(), user.getName(), post.getContents(),
+        return new PostResponse(post.getTitle(), user.getName(), post.getContents(),
                 post.getKeyword(), post.getCreatedAt(), post.getUpdatedAt());
     }
 
@@ -50,7 +53,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findByIdOrElseThrow(id);
 
         if(!post.getUser().getId().equals(userId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "삭제 권한이 없습니다.")
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "삭제 권한이 없습니다.");
         }
 
         postRepository.delete(post);
