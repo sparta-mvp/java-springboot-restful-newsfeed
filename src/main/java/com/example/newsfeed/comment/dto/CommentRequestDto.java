@@ -8,7 +8,7 @@ import lombok.Getter;
 public class CommentRequestDto {
 
     @Size(max = 500, message = "You cannot enter more than 200 characters.")
-    @NotBlank(message = "Please enter the detailss")
+    @NotBlank(message = "Please enter the details.")
     private String contents;
 
 }
