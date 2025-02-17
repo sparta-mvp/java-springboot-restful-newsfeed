@@ -21,7 +21,8 @@ import java.util.Objects;
 @Table(name = "users")
 public class User extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
     private String name;
@@ -49,7 +50,6 @@ public class User extends BaseEntity {
     public boolean isSame(Long userId) {
         return Objects.equals(this.id, userId);
     }
-
 
     public void deActivate() {
         this.name = "탈퇴한 회원";

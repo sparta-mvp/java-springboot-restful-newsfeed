@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class CommentResponseDto {
+public class CommentResponse {
 
     private final String writer;
     private final String postTitle;
@@ -19,8 +19,8 @@ public class CommentResponseDto {
     private final LocalDateTime updatedAt;
 
 
-    public static CommentResponseDto from(Comment entity){
-        return CommentResponseDto.builder()
+    public static CommentResponse from(Comment entity){
+        return CommentResponse.builder()
                 .writer(entity.getUser().getName())
                 .postTitle(entity.getPost().getTitle())
                 .contents(entity.getContents())
