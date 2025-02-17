@@ -45,7 +45,7 @@ public class CommentService {
         //TODO: post 존재 확인
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<Comment> commentList = commentFinder.getCommentByPost(postId, pageable);
+        Page<Comment> commentList = commentFinder.getCommentsByPost(postId, pageable);
 
         return commentList.map(CommentResponse::from);
     }

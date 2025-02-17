@@ -20,17 +20,11 @@ public class CommentFinder {
 
 
     public Comment getComment(Long id) {
-        if (!commentRepository.existsById(id)) {
-            throw new CommentNotFoundIdException();
-        }
-        return commentRepository.findById(id).get();
+        return commentRepository.findById(id).orElseThrow(() -> new CommentNotFoundIdException());
     }
 
 
-    public Page<Comment> getCommentByPost(Long postId, Pageable pageable) {
-        if (!commentRepository.existsByPostId(postId)){
-            throw new NoCommentToPostException();
-        }
+    public Page<Comment> getCommentsByPost(Long postId, Pageable pageable) {
         return commentRepository.findByPostId(postId, pageable);
     }
 }
