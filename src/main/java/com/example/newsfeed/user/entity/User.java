@@ -14,6 +14,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 
+import java.util.Objects;
+
 @Getter
 @Entity
 @Table(name = "users")
@@ -44,17 +46,14 @@ public class User extends BaseEntity {
         this.interestTag = interestTag;
     }
 
-
+    public boolean isSame(Long userId) {
+        return Objects.equals(this.id, userId);
+    }
 
 
     public void deActivate() {
         this.name = "탈퇴한 회원";
         this.status = UserStatus.DEACTIVATED;
-    }
-
-    @PrePersist
-    protected void prePersist() {
-        this.status = UserStatus.ACTIVE;
     }
 
     public void updatePassword(String newPassword) {
@@ -72,4 +71,10 @@ public class User extends BaseEntity {
     public void updateName(String name) {
         this.name = name;
     }
+
+    @PrePersist
+    protected void prePersist() {
+        this.status = UserStatus.ACTIVE;
+    }
+
 }
