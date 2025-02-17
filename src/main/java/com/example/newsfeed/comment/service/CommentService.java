@@ -22,7 +22,6 @@ public class CommentService {
     private final UserFinder userFinder;
 
 
-    //TODO: page size 결정
     private final static int PAGE_SIZE = 20;
 
     public CommentResponseDto addComment(Long postId, LoginUser loginUser, String contents) {
@@ -42,7 +41,6 @@ public class CommentService {
     }
 
 
-    //TODO: update/delete -> session-댓글 작성자 확인 필요
     @Transactional
     public CommentResponseDto updateComment(Long id, LoginUser loginUser, String contents) {
         Comment findComment = commentRepository.findByIdOrElseThrow(id);
