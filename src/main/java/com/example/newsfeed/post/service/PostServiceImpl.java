@@ -1,6 +1,5 @@
 package com.example.newsfeed.post.service;
 
-import com.example.newsfeed.post.dto.PostRequest;
 import com.example.newsfeed.post.dto.PostResponse;
 import com.example.newsfeed.post.entity.Post;
 import com.example.newsfeed.post.repository.PostRepository;
@@ -29,15 +28,13 @@ public class PostServiceImpl implements PostService {
         post.setUser(user);
 
         Post saved = postRepository.save(post);
-        return new PostResponse(post.getTitle(), user.getName(), post.getContents(),
-                post.getKeyword(), post.getCreatedAt(), post.getUpdatedAt());
+        return new PostResponse(saved.getTitle(), saved.getUser().getName(), saved.getContents(),
+                saved.getKeyword(), saved.getCreatedAt(), saved.getUpdatedAt());
     }
 
     @Override
     public PostResponse update(Long userId, Long id, String title, String contents, String keyword) {
         Post post = postRepository.findByIdOrElseThrow(id);
-
-        User user = userFinder.findActive(userId);
 
         if(!post.getUser().getId().equals(userId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "수정권한이 없습니다.");
