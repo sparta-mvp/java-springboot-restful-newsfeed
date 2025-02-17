@@ -11,11 +11,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -26,15 +28,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("/v1/comments")
 @RequiredArgsConstructor
 public class CommentController {
 
     private final CommentService commentService;
 
 
-    @PostMapping("/post/{postId}")
-    public ResponseEntity<Response<CommentResponse>> addComment(@PathVariable Long postId,
+    @PostMapping
+    public ResponseEntity<Response<CommentResponse>> addComment(@RequestParam Long postId,
                                                                 @Valid @RequestBody CommentRequest requestDto,
                                                                 @Login LoginUser loginUser) {
 
@@ -43,15 +45,15 @@ public class CommentController {
     }
 
 
-    @GetMapping("/post/{postId}/comments")
-    public ResponseEntity<Response<CommentResponse>> findByPostIdToComments(@PathVariable Long postId,
-                                                                            @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
-        Page<CommentResponse> commentsList = commentService.findByPostIdToComments(postId, page);
+    @GetMapping
+    public ResponseEntity<Response<CommentResponse>> findByPostIdToComments(@RequestParam Long postId,
+                                                                            @Valid @ModelAttribute PageRequest page) {
+        Page<CommentResponse> commentsList = commentService.findByPostIdToComments(postId, page.getPageSize(), page.getPageNumber());
         return new ResponseEntity<>(Response.fromPage(commentsList), HttpStatus.OK);
     }
 
 
-    @PutMapping("/comment/{commentId}")
+    @PutMapping("/{commentId}")
     public ResponseEntity<Response<CommentResponse>> updateComment(@PathVariable Long commentId,
                                                                    @Valid @RequestBody CommentRequest requestDto,
                                                                    @Login LoginUser loginUser) {
@@ -61,7 +63,7 @@ public class CommentController {
     }
 
 
-    @DeleteMapping("/comment/{commentId}")
+    @DeleteMapping("/{commentId}")
 
     public ResponseEntity<Response<CommentResponse>> deleteComment(@PathVariable Long commentId, @Login LoginUser loginUser) {
         commentService.deleteComment(commentId, loginUser);

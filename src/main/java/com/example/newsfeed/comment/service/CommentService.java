@@ -31,8 +31,6 @@ public class CommentService {
     private final UserFinder userFinder;
 
 
-    private final static int PAGE_SIZE = 20;
-
     public CommentResponse addComment(Long postId, LoginUser loginUser, String contents) {
 
         //TODO: post 정보 가져오기
@@ -43,10 +41,10 @@ public class CommentService {
     }
 
 
-    public Page<CommentResponse> findByPostIdToComments(Long postId, int page) {
+    public Page<CommentResponse> findByPostIdToComments(Long postId, int pageSize, int pageNumber) {
         //TODO: post 존재 확인
 
-        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Comment> commentList = commentFinder.getCommentByPost(postId, pageable);
 
         return commentList.map(CommentResponse::from);
