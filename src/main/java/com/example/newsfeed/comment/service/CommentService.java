@@ -14,9 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -24,9 +21,9 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final UserFinder userFinder;
 
+
     //TODO: page size 결정
     private final static int PAGE_SIZE = 20;
-
 
     public CommentResponseDto addComment(Long postId, LoginUser loginUser, String contents) {
 
@@ -50,10 +47,10 @@ public class CommentService {
     public CommentResponseDto updateComment(Long id, LoginUser loginUser, String contents) {
         Comment findComment = commentRepository.findByIdOrElseThrow(id);
         isEqualToUser(findComment.getUser().getId(), loginUser.getUserId());
-
         Comment saveComment = findComment.update(contents);
         return CommentResponseDto.toDto(saveComment);
     }
+
 
     public void deleteComment(Long id, LoginUser loginUser) {
         Comment comment = commentRepository.findByIdOrElseThrow(id);
