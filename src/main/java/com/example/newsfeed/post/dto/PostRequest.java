@@ -1,11 +1,10 @@
 package com.example.newsfeed.post.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
-public class PostRequestDto {
+public class PostRequest {
 
     @NotBlank(message = "제목은 필수로 입력되어야 합니다.")
     private String title;
@@ -15,7 +14,7 @@ public class PostRequestDto {
 
     private String keywords;
 
-    public PostRequestDto(String title, String contents, String keywords) {
+    public PostRequest(String title, String contents, String keywords) {
         this.title = title;
         this.contents = contents;
         this.keywords = keywords;

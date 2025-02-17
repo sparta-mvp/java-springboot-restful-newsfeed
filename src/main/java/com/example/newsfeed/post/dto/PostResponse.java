@@ -1,24 +1,20 @@
 package com.example.newsfeed.post.dto;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
-public class PostShortResponseDto {
-    @Size(max = 25)
+public class PostResponse {
     private final String title;
-    @Size(max = 100)
     private final String contents;
     private final String memberName;
     private final String keywords;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public PostShortResponseDto(String title, String contents, String memberName,
-                           String keywords, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public PostResponse(String title, String contents, String memberName,
+                        String keywords, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.title = title;
         this.contents = contents;
         this.memberName = memberName;
