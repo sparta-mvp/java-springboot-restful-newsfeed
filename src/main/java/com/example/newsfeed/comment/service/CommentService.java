@@ -31,14 +31,14 @@ public class CommentService {
         User user = userFinder.findActive(loginUser.getUserId());
 
         Comment save = commentRepository.save(new Comment(user, post, contents));
-        return CommentResponseDto.toDto(save);
+        return CommentResponseDto.from(save);
     }
 
     public Page<CommentResponseDto> findByPostIdToComments(Long postId, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE);
         Page<Comment> commentList = commentRepository.findByPostId(postId, pageable);
 
-        return commentList.map(CommentResponseDto::toDto);
+        return commentList.map(CommentResponseDto::from);
     }
 
 
@@ -48,7 +48,7 @@ public class CommentService {
         Comment findComment = commentRepository.findByIdOrElseThrow(id);
         isEqualToUser(findComment.getUser().getId(), loginUser.getUserId());
         Comment saveComment = findComment.update(contents);
-        return CommentResponseDto.toDto(saveComment);
+        return CommentResponseDto.from(saveComment);
     }
 
 

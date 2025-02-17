@@ -16,10 +16,10 @@ public class CommentResponseDto {
     private final String contents;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    private final LocalDateTime updateAt;
+    private final LocalDateTime updatedAt;
 
 
-    public static CommentResponseDto toDto(Comment entity){
+    public static CommentResponseDto from(Comment entity){
         return CommentResponseDto.builder()
                 .writer(entity.getUser().getName())
                 .postTitle(entity.getPost().getTitle())
