@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@DynamicInsert
 public class Comment {
 
     @Id
@@ -30,10 +29,6 @@ public class Comment {
 
     @Column(nullable = false)
     private String contents;
-
-    @Column(nullable = false)
-    @ColumnDefault("0")
-    private int likes;
 
     @CreatedDate
     @Column(updatable = false)
