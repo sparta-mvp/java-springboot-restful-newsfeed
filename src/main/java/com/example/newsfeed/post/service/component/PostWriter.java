@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostWriter {
     private final PostRepository postRepository;
     // create
-    public Post createPost(Post post) { return postRepository.save(post); }
+    public void createPost(Post post) { postRepository.save(post); }
 
     // delete
     public void deletePost(Post post) { postRepository.delete(post); }

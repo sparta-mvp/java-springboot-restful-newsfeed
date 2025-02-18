@@ -1,6 +1,5 @@
 package com.example.newsfeed.post.service;
 
-import com.example.newsfeed.common.exception.ErrorCode;
 import com.example.newsfeed.common.exception.ValidationException;
 import com.example.newsfeed.post.dto.PostResponse;
 import com.example.newsfeed.post.dto.PostShortResponse;
@@ -76,7 +75,7 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public PostResponse findPostById(Long id) {
-        if(!postReader.exists(id)){
+        if(!postReader.doesExist(id)){
             throw new ValidationException(POST_NOT_FOUND);
         }
         return new PostResponse(postFinder.findPost(id));
@@ -85,7 +84,7 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public PostResponse update(Long userId, Long id, String title, String contents, String keyword) {
-        if(!postReader.exists(id)) throw new ValidationException(POST_NOT_FOUND);
+        if(!postReader.doesExist(id)) throw new ValidationException(POST_NOT_FOUND);
 
         if (title == null || contents == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 

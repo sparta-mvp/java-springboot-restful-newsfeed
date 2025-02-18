@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostReader {
     private final PostRepository postRepository;
 
-    public boolean exists(Long id){
+    public boolean doesExist(Long id){
         return postRepository.existsById(id);
     }
 }

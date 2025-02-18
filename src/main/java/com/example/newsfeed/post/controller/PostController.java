@@ -3,7 +3,6 @@ package com.example.newsfeed.post.controller;
 import com.example.newsfeed.auth.dto.LoginUser;
 import com.example.newsfeed.common.request.PageRequest;
 import com.example.newsfeed.common.resolvers.Login;
-import com.example.newsfeed.common.response.Response;
 import com.example.newsfeed.post.dto.PostRequest;
 import com.example.newsfeed.post.dto.PostResponse;
 import com.example.newsfeed.post.dto.PostShortResponse;

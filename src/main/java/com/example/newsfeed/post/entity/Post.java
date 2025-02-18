@@ -4,10 +4,8 @@ import com.example.newsfeed.common.entity.BaseEntity;
 import com.example.newsfeed.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import lombok.Setter;
 
-import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -19,6 +17,7 @@ public class Post extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @Setter
     private User user;
 
     @Column(nullable = false)
@@ -35,10 +34,6 @@ public class Post extends BaseEntity {
         this.title = title;
         this.contents = contents;
         this.keyword = keyword;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public void updatePost(String title, String contents, String keyword) {
