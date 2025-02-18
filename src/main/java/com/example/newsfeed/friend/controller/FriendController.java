@@ -38,7 +38,6 @@ public class FriendController {
         return MessageResponse.of(responseMessage);
     }
 
-
     // 특정 태그를 찾거나 같은 태그인 사람을 검색
     @GetMapping("/search")
     public ResponseEntity<Response<TagUserResponse>> findByTag(@RequestParam(required = false) String tag,
@@ -58,9 +57,11 @@ public class FriendController {
 
 
     @GetMapping
-    public ResponseEntity<Response<FriendResponse>> findMyFriends(@Login LoginUser loginUser, @Valid @ModelAttribute PageRequest page){
+    public ResponseEntity<Response<FriendResponse>> findMyFriends(@Login LoginUser loginUser, @Valid @ModelAttribute PageRequest page) {
         Page<FriendResponse> friendsList = friendService.findByFriends(loginUser.getUserId(), page.getPage(), page.getSize());
         return new ResponseEntity<>(Response.fromPage(friendsList), HttpStatus.OK);
+
+
     }
 
 
