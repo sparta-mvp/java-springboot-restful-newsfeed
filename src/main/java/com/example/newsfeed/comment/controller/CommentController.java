@@ -4,17 +4,14 @@ import com.example.newsfeed.auth.dto.LoginUser;
 import com.example.newsfeed.comment.dto.CommentRequest;
 import com.example.newsfeed.comment.dto.CommentResponse;
 import com.example.newsfeed.comment.service.CommentService;
+import com.example.newsfeed.common.request.PageRequest;
 import com.example.newsfeed.common.resolvers.Login;
 import com.example.newsfeed.common.response.Response;
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -47,8 +44,8 @@ public class CommentController {
 
     @GetMapping
     public ResponseEntity<Response<CommentResponse>> findByPostIdToComments(@RequestParam Long postId,
-                                                                            @Valid @ModelAttribute PageRequest page) {
-        Page<CommentResponse> commentsList = commentService.findByPostIdToComments(postId, page.getPageSize(), page.getPageNumber());
+                                                                         @Valid @ModelAttribute PageRequest page) {
+        Page<CommentResponse> commentsList = commentService.findByPostIdToComments(postId, page.getSize(), page.getPage());
         return new ResponseEntity<>(Response.fromPage(commentsList), HttpStatus.OK);
     }
 

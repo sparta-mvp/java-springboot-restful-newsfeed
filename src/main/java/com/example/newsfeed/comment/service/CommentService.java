@@ -36,7 +36,7 @@ public class CommentService {
         //TODO: post 정보 가져오기
         User user = userFinder.findActive(loginUser.getUserId());
 
-        Comment save = commentWriter.saveComment(new Comment(user, post, contents));
+        Comment save = commentWriter.saveComment(new Comment(user, null, contents));
         return CommentResponse.from(save);
     }
 

@@ -2,7 +2,6 @@ package com.example.newsfeed.comment.service.component;
 
 import com.example.newsfeed.comment.entity.Comment;
 import com.example.newsfeed.comment.exception.CommentNotFoundIdException;
-import com.example.newsfeed.comment.exception.NoCommentToPostException;
 import com.example.newsfeed.comment.repository.CommentRepository;
 
 import org.springframework.data.domain.Page;
