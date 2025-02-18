@@ -4,6 +4,7 @@ import com.example.newsfeed.auth.dto.LoginUser;
 import com.example.newsfeed.common.resolvers.Login;
 import com.example.newsfeed.post.dto.PostRequest;
 import com.example.newsfeed.post.dto.PostResponse;
+import com.example.newsfeed.post.dto.PostShortResponse;
 import com.example.newsfeed.post.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,18 @@ public class PostController {
             @Valid @RequestBody PostRequest dto, @Login LoginUser loginUser) {
         PostResponse saved = postService.save(loginUser.getUserId(), dto.getTitle(), dto.getContents(), dto.getKeywords());
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    }
+
+    // findAll
+    @GetMapping
+    public ResponseEntity<PostShortResponse> findAllPosts() {
+        return new ResponseEntity<>(posts, HttpStatus.OK);
+    }
+
+    //findOne
+    @GetMapping("/{id}")
+    public ResponseEntity<PostResponse> findPostById(@PathVariable Long id) {
+        postService.findById(id);
     }
 
     @PutMapping("/{id}")

@@ -1,6 +1,7 @@
 package com.example.newsfeed.post.service;
 
 import com.example.newsfeed.post.dto.PostResponse;
+import com.example.newsfeed.post.dto.PostShortResponse;
 import com.example.newsfeed.post.entity.Post;
 import com.example.newsfeed.post.repository.PostRepository;
 import com.example.newsfeed.user.entity.User;
@@ -17,7 +18,7 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
 
-    private final UserReader userReader;
+    //private final UserReader userReader;
     private final UserFinder userFinder;
     @Override
     public PostResponse save(Long userId, String title, String contents, String keywords) {
@@ -30,6 +31,17 @@ public class PostServiceImpl implements PostService {
         Post saved = postRepository.save(post);
         return new PostResponse(saved.getTitle(), saved.getUser().getName(), saved.getContents(),
                 saved.getKeyword(), saved.getCreatedAt(), saved.getUpdatedAt());
+    }
+
+    @Override
+    public PostShortResponse findAllPosts() {
+
+        return null;
+    }
+
+    @Override
+    public PostResponse findPostById(Long id) {
+        return null;
     }
 
     @Override
