@@ -22,4 +22,20 @@ public class PostFinder {
     public Page<Post> findPosts(Pageable pageable) {
         return postRepository.findAll(pageable);
     }
+
+    public Page<Post> searchPosts(Pageable pageable, String query) {
+        return postRepository.searchByAllFields(query, pageable);
+    }
+
+    public Page<Post> searchPostsWithTitle(Pageable pageable, String query) {
+        return postRepository.findByTitleContaining(query, pageable);
+    }
+
+    public Page<Post> searchPostsWithContents(Pageable pageable, String query) {
+        return postRepository.findByContentsContaining(query, pageable);
+    }
+
+    public  Page<Post> searchPostsWithKeyWords(Pageable pageable, String query) {
+        return postRepository.findByKeywordContaining(query, pageable);
+    }
 }

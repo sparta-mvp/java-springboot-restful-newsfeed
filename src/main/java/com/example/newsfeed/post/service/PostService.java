@@ -2,6 +2,7 @@ package com.example.newsfeed.post.service;
 
 import com.example.newsfeed.post.dto.PostResponse;
 import com.example.newsfeed.post.dto.PostShortResponse;
+import com.example.newsfeed.post.entity.SearchType;
 import org.springframework.data.domain.Page;
 
 public interface PostService {
@@ -10,4 +11,5 @@ public interface PostService {
     PostResponse findPostById(Long id);
     PostResponse update(Long userId, Long id, String title, String contents, String keywords);
     void delete(Long userId, Long id);
+    Page<PostShortResponse> findWithQuery(SearchType searchType, String query, int pageSize, int pageNumber);
 }

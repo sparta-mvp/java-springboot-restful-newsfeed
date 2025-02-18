@@ -4,6 +4,7 @@ import com.example.newsfeed.common.exception.ValidationException;
 import com.example.newsfeed.post.dto.PostResponse;
 import com.example.newsfeed.post.dto.PostShortResponse;
 import com.example.newsfeed.post.entity.Post;
+import com.example.newsfeed.post.entity.SearchType;
 import com.example.newsfeed.post.service.component.PostFinder;
 import com.example.newsfeed.post.service.component.PostReader;
 import com.example.newsfeed.post.service.component.PostWriter;
@@ -110,5 +111,32 @@ public class PostServiceImpl implements PostService {
         }
 
         postWriter.deletePost(post);
+    }
+
+    @Override
+    public Page<PostShortResponse> findWithQuery(SearchType searchType, String query, int pageSize, int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+        Page<Post> postPage = null;
+
+        if(searchType.equals(SearchType.ALL)) {
+            postPage = postFinder.searchPosts(pageable, query);
+        } else if (searchType.equals(SearchType.TITLE)) {
+            postPage = postFinder.searchPostsWithTitle(pageable, query);
+        } else if(searchType.equals(SearchType.CONTENTS)) {
+            postPage = postFinder.searchPostsWithContents(pageable, query);
+        } else if(searchType.equals(SearchType.KEYWORDS)) {
+            postPage = postFinder.searchPostsWithKeyWords(pageable, query);
+        }
+
+        return postPage.map(post ->
+                new PostShortResponse(
+                        post.getTitle().substring(0, Math.min(post.getTitle().length(), 10)),
+                        post.getContents().substring(0, Math.min(post.getContents().length(), 50)),
+                        post.getUser().getName(),
+                        post.getKeyword(),
+                        post.getCreatedAt(),
+                        post.getUpdatedAt()
+                ));
     }
 }
