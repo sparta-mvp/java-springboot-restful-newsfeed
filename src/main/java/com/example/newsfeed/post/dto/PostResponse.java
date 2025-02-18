@@ -1,5 +1,6 @@
 package com.example.newsfeed.post.dto;
 
+import com.example.newsfeed.post.entity.Post;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -21,5 +22,14 @@ public class PostResponse {
         this.keywords = keywords;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public PostResponse(Post post) {
+        this.title = post.getTitle();
+        this.contents = post.getContents();
+        this.memberName = post.getUser().getName();
+        this.keywords = post.getKeyword();
+        this.createdAt = post.getCreatedAt();
+        this.updatedAt = post.getUpdatedAt();
     }
 }

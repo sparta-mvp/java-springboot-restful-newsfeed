@@ -1,5 +1,6 @@
 package com.example.newsfeed.post.entity;
 
+import com.example.newsfeed.common.entity.BaseEntity;
 import com.example.newsfeed.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @Table(name = "post")
-public class Post {
+public class Post extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,14 +29,7 @@ public class Post {
 
     private String keyword;
 
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
-
-    public Post (){}
+    public Post(){}
 
     public Post(String title, String contents, String keyword) {
         this.title = title;

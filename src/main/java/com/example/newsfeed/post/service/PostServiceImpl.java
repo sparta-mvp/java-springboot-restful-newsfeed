@@ -1,70 +1,115 @@
 package com.example.newsfeed.post.service;
 
+import com.example.newsfeed.common.exception.ErrorCode;
+import com.example.newsfeed.common.exception.ValidationException;
 import com.example.newsfeed.post.dto.PostResponse;
 import com.example.newsfeed.post.dto.PostShortResponse;
 import com.example.newsfeed.post.entity.Post;
-import com.example.newsfeed.post.repository.PostRepository;
+import com.example.newsfeed.post.service.component.PostFinder;
+import com.example.newsfeed.post.service.component.PostReader;
+import com.example.newsfeed.post.service.component.PostWriter;
 import com.example.newsfeed.user.entity.User;
 import com.example.newsfeed.user.service.component.UserFinder;
-import com.example.newsfeed.user.service.component.UserReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+
+import static com.example.newsfeed.common.exception.ErrorCode.POST_NOT_FOUND;
+import static com.example.newsfeed.common.exception.ErrorCode.UNAUTHORIZED_ACCESS;
+
 
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
 
-    private final PostRepository postRepository;
+    private final PostReader postReader;
+    private final PostWriter postWriter;
+    private final PostFinder postFinder;
 
     //private final UserReader userReader;
     private final UserFinder userFinder;
+
     @Override
+    @Transactional
     public PostResponse save(Long userId, String title, String contents, String keywords) {
-        Post post = new Post(title, contents, keywords);
 
         User user = userFinder.findActive(userId);
 
+        if (title == null || contents == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        Post post = new Post(title, contents, keywords);
         post.setUser(user);
 
-        Post saved = postRepository.save(post);
-        return new PostResponse(saved.getTitle(), saved.getUser().getName(), saved.getContents(),
-                saved.getKeyword(), saved.getCreatedAt(), saved.getUpdatedAt());
-    }
+        postWriter.createPost(post);
 
-    @Override
-    public PostShortResponse findAllPosts() {
-
-        return null;
-    }
-
-    @Override
-    public PostResponse findPostById(Long id) {
-        return null;
-    }
-
-    @Override
-    public PostResponse update(Long userId, Long id, String title, String contents, String keyword) {
-        Post post = postRepository.findByIdOrElseThrow(id);
-
-        if(!post.getUser().getId().equals(userId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "수정권한이 없습니다.");
-        }
-        post.updatePost(title, contents, keyword);
-
-        return new PostResponse(post.getTitle(), post.getContents(), post.getUser().getName(),
+        return new PostResponse(post.getTitle(), post.getUser().getName(), post.getContents(),
                 post.getKeyword(), post.getCreatedAt(), post.getUpdatedAt());
     }
 
     @Override
-    public void delete(Long userId, Long id) {
-        Post post = postRepository.findByIdOrElseThrow(id);
+    @Transactional
+    public Page<PostShortResponse> findAllPosts(int pageSize, int pageNumber) {
 
-        if(!post.getUser().getId().equals(userId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "삭제 권한이 없습니다.");
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Post> postPage = postFinder.findPosts(pageable);
+
+        return postPage.map(post ->
+                new PostShortResponse(
+                        post.getTitle().substring(0, Math.min(post.getTitle().length(), 10)),
+                        post.getContents().substring(0, Math.min(post.getContents().length(), 100)),
+                        post.getUser().getName(),
+                        post.getKeyword(),
+                        post.getCreatedAt(),
+                        post.getUpdatedAt()
+                ));
+    }
+
+    @Override
+    @Transactional
+    public PostResponse findPostById(Long id) {
+        if(!postReader.exists(id)){
+            throw new ValidationException(POST_NOT_FOUND);
+        }
+        return new PostResponse(postFinder.findPost(id));
+    }
+
+    @Override
+    @Transactional
+    public PostResponse update(Long userId, Long id, String title, String contents, String keyword) {
+        if(!postReader.exists(id)) throw new ValidationException(POST_NOT_FOUND);
+
+        if (title == null || contents == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+
+        Post post = postFinder.findPost(id);
+        User writer = userFinder.findActive(userId);
+
+        if(!post.getUser().equals(writer)) throw new ValidationException(UNAUTHORIZED_ACCESS);
+
+        post.updatePost(title, contents, keyword);
+
+        //postWriter.createPost(post);
+
+        return new PostResponse(post);
+    }
+
+    @Override
+    @Transactional
+    public void delete(Long userId, Long id) {
+        Post post = postFinder.findPost(id);
+
+        if(!post.getUser().equals(userFinder.findActive(userId))) {
+            throw new ValidationException(UNAUTHORIZED_ACCESS);
         }
 
-        postRepository.delete(post);
+        postWriter.deletePost(post);
     }
 }

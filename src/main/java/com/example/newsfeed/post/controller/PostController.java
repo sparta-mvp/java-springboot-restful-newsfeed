@@ -1,13 +1,16 @@
 package com.example.newsfeed.post.controller;
 
 import com.example.newsfeed.auth.dto.LoginUser;
+import com.example.newsfeed.common.request.PageRequest;
 import com.example.newsfeed.common.resolvers.Login;
+import com.example.newsfeed.common.response.Response;
 import com.example.newsfeed.post.dto.PostRequest;
 import com.example.newsfeed.post.dto.PostResponse;
 import com.example.newsfeed.post.dto.PostShortResponse;
 import com.example.newsfeed.post.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,14 +30,16 @@ public class PostController {
 
     // findAll
     @GetMapping
-    public ResponseEntity<PostShortResponse> findAllPosts() {
-        return new ResponseEntity<>(posts, HttpStatus.OK);
+    public ResponseEntity<Page<PostShortResponse>> findAllPosts(@Valid @ModelAttribute PageRequest page) {
+        Page<PostShortResponse> postsList = postService.findAllPosts(page.getSize(), page.getPage());
+        return new ResponseEntity<>(postsList, HttpStatus.OK);
     }
 
     //findOne
     @GetMapping("/{id}")
     public ResponseEntity<PostResponse> findPostById(@PathVariable Long id) {
-        postService.findById(id);
+        PostResponse post = postService.findPostById(id);
+        return new ResponseEntity<>(post, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
