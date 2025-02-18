@@ -1,19 +1,23 @@
 package com.example.newsfeed.comment.entity;
 
-import com.example.newsfeed.post.entity.Post;
+import com.example.newsfeed.post.Post;
 import com.example.newsfeed.user.entity.User;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import java.time.LocalDateTime;
 import lombok.Getter;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
-@DynamicInsert
 public class Comment {
 
     @Id
@@ -30,10 +34,6 @@ public class Comment {
 
     @Column(nullable = false)
     private String contents;
-
-    @Column(nullable = false)
-    @ColumnDefault("0")
-    private int likes;
 
     @CreatedDate
     @Column(updatable = false)
@@ -66,4 +66,5 @@ public class Comment {
         this.contents = contents;
         return this;
     }
+
 }
