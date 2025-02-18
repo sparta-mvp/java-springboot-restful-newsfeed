@@ -17,7 +17,6 @@ import com.example.newsfeed.user.entity.User;
 import com.example.newsfeed.user.service.component.UserFinder;
 import com.example.newsfeed.user.service.component.UserReader;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class FriendService {
 
     private final UserReader userReader;
@@ -34,6 +32,7 @@ public class FriendService {
     private final FriendFinder friendFinder;
     private final FriendWriter friendWriter;
     private final FriendReader friendReader;
+
     private final FriendApplyFinder applyFinder;
     private final FriendApplyWriter applyWriter;
 
@@ -63,7 +62,9 @@ public class FriendService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
         InterestTag tag = getTag(interestTag, userId);
+        return userReader.findByTag(tag, pageable).map(user -> TagUserResponse.of(user.getId(), user.getName()));
     }
+
 
     public FriendResponse getFriend(Long userId, Long id) {
         Friend friend = friendFinder.getFriend(userId, id);
