@@ -34,5 +34,4 @@ public class UserFinder {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException());
         return user.getInterestTag();
     }
-
 }
