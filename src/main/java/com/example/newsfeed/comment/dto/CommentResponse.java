@@ -24,7 +24,7 @@ public class CommentResponse {
                 .writer(entity.getUser().getName())
                 .postTitle(entity.getPost().getTitle())
                 .contents(entity.getContents())
-                .updateAt(entity.getUpdatedAt())
+                .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 }
