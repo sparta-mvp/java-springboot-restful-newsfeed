@@ -18,7 +18,11 @@ public enum ErrorCode {
     INVALID_INTEREST_TAG(HttpStatus.BAD_REQUEST,"INVALID_INTEREST_TAG", "유효하지 않은 관심 태그입니다."),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED,"UNAUTHORIZED","로그인이 필요합니다."),
     DEACTIVATED_USER(HttpStatus.FORBIDDEN,"DEACTIVATED_USER","이미 탈퇴한 회원입니다." ),
-    NO_CHANGES_PROVIDED(HttpStatus.BAD_REQUEST,"NO_CHANGES_PROVIDED","변경할 정보가 없습니다.");
+    NO_CHANGES_PROVIDED(HttpStatus.BAD_REQUEST,"NO_CHANGES_PROVIDED","변경할 정보가 없습니다."),
+    FRIEND_NOT_FOUND(HttpStatus.NOT_FOUND,"FRIEND_NOT_FOUND","친구를 찾을 수 없습니다."),
+    DUPLICATE_FRIEND(HttpStatus.BAD_REQUEST,"DUPLICATE_FRIEND","이미 친구 관계 입니다."),
+    NOT_FRIEND(HttpStatus.BAD_REQUEST,"NOT_FRIEND","친구가 아닙니다."),
+    INVALID_FOLLOW_TYPE(HttpStatus.BAD_REQUEST, "INVALID_FOLLOW_TYPE", "FOLLOWING 또는 FOLLOWER 검색만 가능합니다.");
 
     private final HttpStatus status;
     private final String code;

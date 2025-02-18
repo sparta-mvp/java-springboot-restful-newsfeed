@@ -15,4 +15,9 @@ public class PageRequest {
 
     @Min(value = 1, message = "페이지 크기는 1 이상이어야 합니다.")
     private int size;
+
+    public PageRequest(int page, int size) {
+        this.page = page;
+        this.size = size;
+    }
 }
