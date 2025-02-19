@@ -6,6 +6,7 @@ import com.example.newsfeed.commentlike.service.CommentLikeService;
 import com.example.newsfeed.commentlike.dto.CommentLikeRequest;
 import com.example.newsfeed.common.resolvers.Login;
 import com.example.newsfeed.common.response.Response;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +24,7 @@ public class CommentLikeController {
     private final CommentLikeService commentLikeService;
 
     @PostMapping
-    public Response<Void> likeComment(@Login LoginUser loginUser, @RequestBody CommentLikeRequest commentLikeRequest){
+    public Response<Void> likeComment(@Login LoginUser loginUser, @RequestBody @Valid CommentLikeRequest commentLikeRequest){
         commentLikeService.likeComment(commentLikeRequest.getCommentId(), loginUser);
         return Response.empty();
     }

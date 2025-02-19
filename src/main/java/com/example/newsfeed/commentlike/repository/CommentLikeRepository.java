@@ -15,14 +15,13 @@ public class CommentLikeRepository {
     private final EntityManager em;
 
     public boolean existsByCommentIdAndUserId(Long commentId, Long userId) {
-        boolean present = em.createQuery("select cl from CommentLike cl where cl.comment.id = :commentId and cl.user.id = :userId")
+        return em.createQuery("select cl from CommentLike cl where cl.comment.id = :commentId and cl.user.id = :userId")
                 .setParameter("commentId", commentId)
                 .setParameter("userId", userId)
                 .setMaxResults(1)
                 .getResultStream()
                 .findFirst()
                 .isPresent();
-        return present;
 
     }
 
