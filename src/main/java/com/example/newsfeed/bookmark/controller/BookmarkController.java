@@ -17,6 +17,8 @@ import java.util.List;
 @RequestMapping("/api/v1/bookmarks")
 public class BookmarkController {
 
+    public void test(){}
+
     private final BookmarkService bookmarkService;
 
     //북마크 추가 (로그인한 유저가 다른 유저의 게시글을 저장)
