@@ -1,7 +1,8 @@
 package com.example.newsfeed.post.service;
 
+import com.example.newsfeed.bookmark.service.component.BookmarkWriter;
+import com.example.newsfeed.comment.service.component.CommentWriter;
 import com.example.newsfeed.common.exception.ValidationException;
-import com.example.newsfeed.post.dto.PostLoggedResponse;
 import com.example.newsfeed.post.dto.PostResponse;
 import com.example.newsfeed.post.dto.PostShortResponse;
 import com.example.newsfeed.post.entity.Post;
@@ -35,6 +36,9 @@ public class PostServiceImpl implements PostService {
 
     private final UserFinder userFinder;
     private final PostLikeReader postLikeReader;
+
+    private final CommentWriter commentWriter;
+    private final BookmarkWriter bookmarkWriter;
 
     @Override
     @Transactional
@@ -113,6 +117,9 @@ public class PostServiceImpl implements PostService {
             throw new ValidationException(UNAUTHORIZED_ACCESS);
         }
 
+        //TODO 연관 댓글 삭제, 북마크 삭제
+        commentWriter.bulkDeleteByPostId(post.getId());
+        bookmarkWriter.bulkDeleteByPostId(post.getId());
         postWriter.deletePost(post);
     }
 

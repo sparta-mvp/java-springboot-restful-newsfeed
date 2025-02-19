@@ -18,4 +18,8 @@ public class CommentWriter {
     public void deleteComment(Long deleteId){
         commentRepository.deleteById(deleteId);
     }
+
+    public void bulkDeleteByPostId(Long postId) {
+        commentRepository.deleteByPostId(postId);
+    }
 }
