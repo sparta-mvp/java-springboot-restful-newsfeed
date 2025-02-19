@@ -1,14 +1,12 @@
-package com.example.newsfeed.friend.controller;
+package com.example.newsfeed.friendapply.service;
 
-import com.example.newsfeed.friend.exception.NotValidDirectionException;
+import com.example.newsfeed.friendapply.exception.NotValidDirectionException;
 import java.util.Arrays;
 
 public enum ApplicationDirection {
 
-    // 뒤에 + ME 가 있다고 가정 -> from me, to me
-
-    FROM,   // 내가 친구 신청
-    TO;     // 나에게 친구 신청
+    SEND,   // 내가 친구 신청
+    RECEIVE;     // 나에게 친구 신청
 
 
     public static ApplicationDirection of(String direct) {
@@ -17,4 +15,5 @@ public enum ApplicationDirection {
                 .findFirst()
                 .orElseThrow(() -> new NotValidDirectionException());
     }
+
 }
