@@ -26,4 +26,8 @@ public class CommentFinder {
     public Page<Comment> getCommentsByPost(Long postId, Pageable pageable) {
         return commentRepository.findByPostId(postId, pageable);
     }
+
+    public Page<Comment> findCommentsWithPostAndUserByPostId(Long postId, Pageable pageable) {
+        return commentRepository.findCommentsWithPostAndUserByPostId(postId, pageable);
+    }
 }
