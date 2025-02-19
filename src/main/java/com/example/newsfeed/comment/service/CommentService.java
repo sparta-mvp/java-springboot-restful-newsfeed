@@ -40,8 +40,8 @@ public class CommentService {
 
     public CommentResponse addComment(Long postId, LoginUser loginUser, String contents) {
 
-        Post post = postFinder.findPost(postId);
         User user = userFinder.findActive(loginUser.getUserId());
+        Post post = postFinder.findPost(postId);
 
         Comment save = commentWriter.saveComment(new Comment(user, post, contents));
         return CommentResponse.from(save);

@@ -1,6 +1,5 @@
 package com.example.newsfeed.friend.service;
 
-import com.example.newsfeed.friend.controller.ApplicationDirection;
 import com.example.newsfeed.friend.dto.FriendResponse;
 import com.example.newsfeed.friend.dto.TagUserResponse;
 import com.example.newsfeed.friend.entity.Friend;
@@ -18,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,16 +35,6 @@ public class FriendService {
         InterestTag tag = getTag(interestTag, userId);
         return userReader.findByTag(tag, pageable).map(user -> TagUserResponse.of(user.getId(), user.getName()));
     }
-
-
-    @Transactional(readOnly = true)
-    public Page<FriendResponse> getApplyList(ApplicationDirection direction, Long userId, int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page< 신청Entity > applyList = getDirection(direction, userId, pageable);
-
-        return applyList.map(신청Response::from);
-    }
-
 
     public FriendResponse getFriend(Long userId, Long id) {
         Friend friend = friendFinder.getFriend(userId, id);
@@ -79,12 +67,5 @@ public class FriendService {
         }
 
         return InterestTag.of(interestTag);
-    }
-
-    private Page<Friend> getDirection(ApplicationDirection type, Long userId, Pageable pageable) {
-        if (type.equals(ApplicationDirection.FROM)) {
-            return 신청Service.findByToUser(userId, pageable);
-        }
-        return 신청Service.findByFromUser(userId, pageable);
     }
 }
