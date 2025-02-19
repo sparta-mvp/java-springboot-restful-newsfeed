@@ -18,4 +18,8 @@ public class BookmarkWriter {
     public void deleteBookmark(Long bookmarkId) {
         bookmarkRepository.deleteById(bookmarkId);
     }
+
+    public void bulkDeleteByPostId(Long postId) {
+        bookmarkRepository.deleteByPostId(postId);
+    }
 }
