@@ -2,6 +2,7 @@ package com.example.newsfeed.commentlike.service;
 
 import com.example.newsfeed.auth.dto.LoginUser;
 import com.example.newsfeed.comment.entity.Comment;
+import com.example.newsfeed.commentlike.dto.CommentLikeResponse;
 import com.example.newsfeed.commentlike.entity.CommentLike;
 import com.example.newsfeed.comment.exception.CommentNotFoundIdException;
 import com.example.newsfeed.commentlike.repository.CommentLikeRepository;
@@ -60,4 +61,10 @@ public class CommentLikeService {
         commentLikeRepository.delete(commentLike);
     }
 
+    public CommentLikeResponse getCommentLikeStatus(LoginUser loginUser, Long commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CommentNotFoundIdException());
+        long likeCount = commentLikeRepository.countByCommentId(commentId);
+        boolean isLiked = commentLikeRepository.existsByCommentIdAndUserId(commentId, loginUser.getUserId());
+        return CommentLikeResponse.of(likeCount, isLiked);
+    }
 }
