@@ -11,7 +11,6 @@ import com.example.newsfeed.friend.dto.TagUserResponse;
 import com.example.newsfeed.friend.service.FriendService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,17 +40,6 @@ public class FriendController {
 
         Page<TagUserResponse> tagList = friendService.findByTag(tag, loginUser.getUserId(), page.getPage(), page.getSize());
         return new ResponseEntity<>(Response.fromPage(tagList), HttpStatus.OK);
-    }
-
-
-    // 내가 팔로우 하는 사람들(following) 호출 / 나를 팔로우 하는 사람들(follower) 호출
-    @GetMapping
-    public ResponseEntity<Response<FriendResponse>> getFollow(@RequestParam(name = "type") String type,
-                                                              @Login LoginUser loginUser,
-                                                              @Valid @ModelAttribute PageRequest page) {
-
-        Page<FriendResponse> myFollow = friendService.getFollowByType(FollowType.of(type), loginUser.getUserId(), page.getPage(), page.getSize());
-        return new ResponseEntity<>(Response.fromPage(myFollow), HttpStatus.OK);
     }
 
 

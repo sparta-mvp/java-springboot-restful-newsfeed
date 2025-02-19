@@ -9,10 +9,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 
 @Entity
 @Getter
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(name = "unique_friend", columnNames = {"to_user_id", "from_user_id"})
+        }
+)
 public class Friend {
 
     @Id
@@ -26,6 +33,7 @@ public class Friend {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "id")
     private User fromUser;
+
 
 
     public Friend() {

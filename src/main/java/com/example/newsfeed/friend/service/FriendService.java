@@ -1,6 +1,5 @@
 package com.example.newsfeed.friend.service;
 
-import com.example.newsfeed.friend.controller.FollowType;
 import com.example.newsfeed.friend.dto.FriendResponse;
 import com.example.newsfeed.friend.dto.TagUserResponse;
 import com.example.newsfeed.friend.entity.Friend;
@@ -18,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,16 +35,6 @@ public class FriendService {
         InterestTag tag = getTag(interestTag, userId);
         return userReader.findByTag(tag, pageable).map(user -> TagUserResponse.of(user.getId(), user.getName()));
     }
-
-
-    @Transactional(readOnly = true)
-    public Page<FriendResponse> getFollowByType(FollowType type, Long userId, int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<Friend> followList = getFollowList(type, userId, pageable);
-
-        return followList.map(FriendResponse::from);
-    }
-
 
     public FriendResponse getFriend(Long userId, Long id) {
         Friend friend = friendFinder.getFriend(userId, id);
@@ -80,12 +68,4 @@ public class FriendService {
 
         return InterestTag.of(interestTag);
     }
-
-    private Page<Friend> getFollowList(FollowType type, Long userId, Pageable pageable) {
-        if (type.equals(FollowType.FOLLOWING)) {
-            return friendReader.findByToUser(userId, pageable);
-        }
-        return friendReader.findByFromUser(userId, pageable);
-    }
-
 }
