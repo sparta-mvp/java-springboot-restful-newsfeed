@@ -34,9 +34,8 @@ public class UserService {
 
     @Transactional
     public void signup(SignupRequest requestDto) {
-        if (!isMatchingPassword(requestDto.getPassword(), requestDto.getPasswordCheck())) {
-            throw new ValidationException(PASSWORD_CHECK_MISMATCH);
-        }
+
+        validatePasswordMatch(requestDto.getPassword(), requestDto.getPasswordCheck());
 
         InterestTag interestTag = InterestTag.of(requestDto.getInterestTag());
 
@@ -69,24 +68,17 @@ public class UserService {
 
         User user = userFinder.findActive(loginUser.getUserId());
 
-        if (!isMatchingPassword(requestDto.getNewPassword(), requestDto.getNewPasswordCheck())) {
-            throw new ValidationException(PASSWORD_CHECK_MISMATCH);
-        }
+        validateCorrectPassword(requestDto.getOldPassword(), user.getPassword());
 
-        if (!passwordEncoder.matches(requestDto.getOldPassword(), user.getPassword())) {
-            throw new InvalidPasswordException();
-        }
+        validatePasswordMatch(requestDto.getNewPassword(), requestDto.getNewPasswordCheck());
 
-
+        validateNotSameAsOldPassword(requestDto.getNewPassword(), user.getPassword());
 
         String encodedPassword = passwordEncoder.encode(requestDto.getNewPassword());
 
         user.updatePassword(encodedPassword);
 
     }
-
-
-
 
     @Transactional
     public void updateUser(LoginUser loginUser, UserRequest requestDto) {
@@ -114,8 +106,23 @@ public class UserService {
         return UserResponse.from(user);
     }
 
-    private boolean isMatchingPassword(String password, String passwordCheck) {
-        return password != null && password.equals(passwordCheck);
+
+    private void validateCorrectPassword(String oldPassword, String password) {
+        if (!passwordEncoder.matches(oldPassword, password)) {
+            throw new InvalidPasswordException();
+        }
+    }
+
+    private void validateNotSameAsOldPassword(String password, String encodedPassword) {
+        if (passwordEncoder.matches(password,encodedPassword)) {
+            throw new ValidationException(ErrorCode.SAME_PASSWORD);
+        }
+    }
+
+    private void validatePasswordMatch(String password, String passwordCheck) {
+        if (!StringUtils.hasText(password) || !password.equals(passwordCheck)) {
+            throw new ValidationException(PASSWORD_CHECK_MISMATCH);
+        }
     }
 
 }

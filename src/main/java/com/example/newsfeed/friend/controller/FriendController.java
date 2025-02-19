@@ -11,7 +11,6 @@ import com.example.newsfeed.friend.dto.TagUserResponse;
 import com.example.newsfeed.friend.service.FriendService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +32,12 @@ public class FriendController {
     private final FriendService friendService;
 
 
+    @PostMapping
+    public MessageResponse addFriendOrRefuse(@Login LoginUser loginUser, @Valid @RequestBody FriendRequest friendRequest) {
+        String responseMessage = friendService.addFriendOrRefuse(loginUser.getUserId(), friendRequest.getUser(), friendRequest.getStatus());
+        return MessageResponse.of(responseMessage);
+    }
+
     // 특정 태그를 찾거나 같은 태그인 사람을 검색
     @GetMapping("/search")
     public ResponseEntity<Response<TagUserResponse>> findByTag(@RequestParam(required = false) String tag,
@@ -43,18 +48,6 @@ public class FriendController {
         return new ResponseEntity<>(Response.fromPage(tagList), HttpStatus.OK);
     }
 
-
-    // 내가 팔로우 하는 사람들(following) 호출 / 나를 팔로우 하는 사람들(follower) 호출
-    @GetMapping
-    public ResponseEntity<Response<FriendResponse>> getFollow(@RequestParam(name = "type") String type,
-                                                              @Login LoginUser loginUser,
-                                                              @Valid @ModelAttribute PageRequest page) {
-
-        Page<FriendResponse> myFollow = friendService.getFollowByType(FollowType.of(type), loginUser.getUserId(), page.getPage(), page.getSize());
-        return new ResponseEntity<>(Response.fromPage(myFollow), HttpStatus.OK);
-    }
-
-
     // 친구 검색
     @GetMapping("/{id}")
     public ResponseEntity<Response<FriendResponse>> getFriend(@Login LoginUser loginUser, @PathVariable Long id) {
@@ -63,16 +56,18 @@ public class FriendController {
     }
 
 
-    @PostMapping
-    public MessageResponse addFollow(@Login LoginUser loginUser, @RequestBody FriendRequest friendRequest) {
-        friendService.addFollow(loginUser.getUserId(), friendRequest.getFollowing());
-        return MessageResponse.of("팔로우에 성공하였습니다.");
+    @GetMapping
+    public ResponseEntity<Response<FriendResponse>> findMyFriends(@Login LoginUser loginUser, @Valid @ModelAttribute PageRequest page) {
+        Page<FriendResponse> friendsList = friendService.findByFriends(loginUser.getUserId(), page.getPage(), page.getSize());
+        return new ResponseEntity<>(Response.fromPage(friendsList), HttpStatus.OK);
+
+
     }
 
 
     @DeleteMapping
-    public MessageResponse deleteFollow(@Login LoginUser loginUser, @RequestParam Long deleteId) {
-        friendService.deleteFollow(loginUser.getUserId(), deleteId);
+    public MessageResponse deleteFriend(@Login LoginUser loginUser, @RequestParam(name = "id") Long deleteId) {
+        friendService.deleteFriend(loginUser.getUserId(), deleteId);
         return MessageResponse.of("삭제되었습니다.");
     }
 

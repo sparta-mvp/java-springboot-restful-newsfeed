@@ -26,6 +26,9 @@ public class UserFinder {
         return user;
     }
 
+    public User findById(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException());
+    }
 
     public InterestTag findByUserToTag(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException());

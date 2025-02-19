@@ -1,6 +1,6 @@
 package com.example.newsfeed.friend.service;
 
-import com.example.newsfeed.friend.controller.FollowType;
+import com.example.newsfeed.friend.dto.ApplicationStatus;
 import com.example.newsfeed.friend.dto.FriendResponse;
 import com.example.newsfeed.friend.dto.TagUserResponse;
 import com.example.newsfeed.friend.entity.Friend;
@@ -9,6 +9,9 @@ import com.example.newsfeed.friend.exception.NotFriendException;
 import com.example.newsfeed.friend.service.component.FriendFinder;
 import com.example.newsfeed.friend.service.component.FriendReader;
 import com.example.newsfeed.friend.service.component.FriendWriter;
+import com.example.newsfeed.friendapply.entity.FriendApply;
+import com.example.newsfeed.friendapply.service.component.FriendApplyFinder;
+import com.example.newsfeed.friendapply.service.component.FriendApplyWriter;
 import com.example.newsfeed.user.entity.InterestTag;
 import com.example.newsfeed.user.entity.User;
 import com.example.newsfeed.user.service.component.UserFinder;
@@ -30,6 +33,30 @@ public class FriendService {
     private final FriendWriter friendWriter;
     private final FriendReader friendReader;
 
+    private final FriendApplyFinder applyFinder;
+    private final FriendApplyWriter applyWriter;
+
+
+    public String addFriendOrRefuse(Long userId, Long applicant, ApplicationStatus status) {
+        if (friendReader.isExist(userId, applicant)) {
+            throw new DuplicateRelationshipException();
+        }
+
+        FriendApply sendUser = applyFinder.getSentRequestsToUser(applicant, userId);
+        applyWriter.deleteApply(sendUser);
+
+            if (status.getMessage().equals("Y")) {
+
+                User user1 = userFinder.findActive(userId);
+                User user2 = userFinder.findActive(applicant);
+                Friend friend = new Friend(user1, user2);
+
+                friendWriter.saveFriend(friend);
+                return "친구 수락";
+            }
+        return "친구 거절";
+    }
+
 
     public Page<TagUserResponse> findByTag(String interestTag, Long userId, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
@@ -39,36 +66,27 @@ public class FriendService {
     }
 
 
-    @Transactional(readOnly = true)
-    public Page<FriendResponse> getFollowByType(FollowType type, Long userId, int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<Friend> followList = getFollowList(type, userId, pageable);
-
-        return followList.map(FriendResponse::from);
-    }
-
-
     public FriendResponse getFriend(Long userId, Long id) {
         Friend friend = friendFinder.getFriend(userId, id);
         return FriendResponse.from(friend);
     }
 
 
-    public void addFollow(Long userId, Long following) {
-        if (friendReader.isFollowing(userId, following)) {
-            throw new DuplicateRelationshipException();
-        }
-
-        friendWriter.addFollow(userId, following);
+    @Transactional(readOnly = true)
+    public Page<FriendResponse> findByFriends(Long userId, int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Friend> myFriends = friendReader.findMyFriends(userId, pageable);
+        return myFriends.map(FriendResponse::from);
     }
 
 
-    public void deleteFollow(Long userId, Long deleteId) {
-        if (!friendReader.isFollowing(userId, deleteId)) {
+    public void deleteFriend(Long userId, Long deleteId) {
+        if (!friendReader.isExist(userId, deleteId)) {
             throw new NotFriendException();
         }
 
-        friendWriter.deleteFollow(userId, deleteId);
+        Friend friend = friendFinder.getFriend(userId, deleteId);
+        friendWriter.deleteFriend(friend);
     }
 
 
@@ -80,12 +98,4 @@ public class FriendService {
 
         return InterestTag.of(interestTag);
     }
-
-    private Page<Friend> getFollowList(FollowType type, Long userId, Pageable pageable) {
-        if (type.equals(FollowType.FOLLOWING)) {
-            return friendReader.findByToUser(userId, pageable);
-        }
-        return friendReader.findByFromUser(userId, pageable);
-    }
-
 }
