@@ -9,6 +9,10 @@ import com.example.newsfeed.comment.service.component.CommentFinder;
 import com.example.newsfeed.comment.service.component.CommentReader;
 import com.example.newsfeed.comment.service.component.CommentWriter;
 
+import com.example.newsfeed.post.entity.Post;
+import com.example.newsfeed.post.exception.PostNotFoundException;
+import com.example.newsfeed.post.service.component.PostFinder;
+import com.example.newsfeed.post.service.component.PostReader;
 import com.example.newsfeed.user.entity.User;
 import com.example.newsfeed.user.service.component.UserFinder;
 
@@ -30,19 +34,25 @@ public class CommentService {
 
     private final UserFinder userFinder;
 
+    private final PostFinder postFinder;
+    private final PostReader postReader;
+
 
     public CommentResponse addComment(Long postId, LoginUser loginUser, String contents) {
 
-        //TODO: post 정보 가져오기
+        Post post = postFinder.findPost(postId);
         User user = userFinder.findActive(loginUser.getUserId());
 
-        Comment save = commentWriter.saveComment(new Comment(user, null, contents));
+        Comment save = commentWriter.saveComment(new Comment(user, post, contents));
         return CommentResponse.from(save);
     }
 
 
     public Page<CommentResponse> findByPostIdToComments(Long postId, int pageSize, int pageNumber) {
-        //TODO: post 존재 확인
+
+        if (!postReader.doesExist(postId)) {
+            throw new PostNotFoundException();
+        }
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Comment> commentList = commentFinder.getCommentsByPost(postId, pageable);
