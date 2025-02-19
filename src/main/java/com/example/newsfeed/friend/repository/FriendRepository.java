@@ -11,11 +11,10 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
 
     boolean existsByToUserIdAndFromUserId(Long userId, Long friend);
 
-    @Query("SELECT f from Friend f join fetch f.fromUser where f.fromUser.id = :fromUser")
-    Page<Friend> findByFromUserId(Long fromUser, Pageable pageable);
-
-    @Query("SELECT f from Friend f join fetch f.toUser where f.toUser.id = :toUser")
-    Page<Friend> findByToUserId(Long toUser, Pageable pageable);
-
     Optional<Friend> findByToUserIdAndFromUserId(Long toUser, Long fromUser);
+
+    Optional<Friend> findByFromUserIdAndToUserId(Long toUser, Long fromUser);
+
+    @Query("SELECT f from Friend f join fetch f.toUser where f.toUser.id = :userId")
+    Page<Friend> findByToUserId(Long userId, Pageable pageable);
 }

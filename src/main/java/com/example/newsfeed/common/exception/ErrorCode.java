@@ -22,7 +22,12 @@ public enum ErrorCode {
     FRIEND_NOT_FOUND(HttpStatus.NOT_FOUND,"FRIEND_NOT_FOUND","친구를 찾을 수 없습니다."),
     DUPLICATE_FRIEND(HttpStatus.BAD_REQUEST,"DUPLICATE_FRIEND","이미 친구 관계 입니다."),
     NOT_FRIEND(HttpStatus.BAD_REQUEST,"NOT_FRIEND","친구가 아닙니다."),
-    INVALID_DIRECTION(HttpStatus.BAD_REQUEST, "INVALID_DIRECTION", "FROM과 TO에 대한 결과만 조회 가능합니다.");
+    INVALID_DIRECTION(HttpStatus.BAD_REQUEST, "INVALID_DIRECTION", "FROM과 TO에 대한 결과만 조회 가능합니다."),
+    INVALID_ACCEPT_FRIEND(HttpStatus.BAD_REQUEST, "INVALID_ACCEPT_FRIEND", "수락 또는 거절만 가능합니다."),
+    FRIEND_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "FRIEND_ALREADY_EXISTS", "이미 존재하는 친구입니다."),
+    APPLY_NOT_FOUND(HttpStatus.NOT_FOUND, "APPLY_NOT_FOUND", "존재하지 않는 요청입니다."),
+    SELF_APPLY(HttpStatus.BAD_REQUEST, "SELF_APPLY", "자신에게는 친구 신청을 할 수 없습니다."),
+    DUPLICATE_APPLY(HttpStatus.BAD_REQUEST, "DUPLICATE_APPLY","이미 존재하는 요청입니다.");
 
     private final HttpStatus status;
     private final String code;

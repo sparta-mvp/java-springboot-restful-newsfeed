@@ -2,6 +2,7 @@ package com.example.newsfeed.friend.service.component;
 
 import com.example.newsfeed.friend.entity.Friend;
 import com.example.newsfeed.friend.repository.FriendRepository;
+import com.example.newsfeed.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,16 +16,12 @@ public class FriendReader {
 
     private final FriendRepository friendRepository;
 
-    public boolean isFollowing(Long toUser, Long fromUser) {
+    public boolean isExist(Long toUser, Long fromUser) {
         return friendRepository.existsByToUserIdAndFromUserId(toUser, fromUser);
     }
 
-    public Page<Friend> findByToUser(Long userId, Pageable pageable) {
+    public Page<Friend> findMyFriends(Long userId, Pageable pageable) {
         return friendRepository.findByToUserId(userId, pageable);
-    }
-
-    public Page<Friend> findByFromUser(Long userId, Pageable pageable) {
-        return friendRepository.findByFromUserId(userId, pageable);
     }
 
 }
