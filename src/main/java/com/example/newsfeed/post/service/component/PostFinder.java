@@ -1,5 +1,6 @@
 package com.example.newsfeed.post.service.component;
 
+import com.example.newsfeed.post.dto.PostShortResponse;
 import com.example.newsfeed.post.entity.Post;
 import com.example.newsfeed.post.exception.PostNotFoundException;
 import com.example.newsfeed.post.repository.PostRepository;
@@ -19,8 +20,17 @@ public class PostFinder {
         return postRepository.findById(postId).orElseThrow(()-> new PostNotFoundException());
     }
 
-    public Page<Post> findPosts(Pageable pageable) {
-        return postRepository.findAll(pageable);
+//    public Page<Post> findPosts(Pageable pageable) {
+//        return postRepository.findAll(pageable);
+//    }
+
+    public Page<PostShortResponse> findAll (Pageable pageable) {
+        return postRepository.findAllWithLikeCnt(pageable);
+    }
+
+    public Page<PostShortResponse> findAllWithLikeSorted(Pageable pageable) {
+        // 전체 포스트를 가져와 likeCnt로 desc
+        return postRepository.findAllWithLikeSorted(pageable);
     }
 
     public Page<Post> searchPosts(Pageable pageable, String query) {

@@ -15,16 +15,12 @@ public class FriendReader {
 
     private final FriendRepository friendRepository;
 
-    public boolean isFollowing(Long toUser, Long fromUser) {
+    public boolean isExist(Long toUser, Long fromUser) {
         return friendRepository.existsByToUserIdAndFromUserId(toUser, fromUser);
     }
 
-    public Page<Friend> findByToUser(Long userId, Pageable pageable) {
+    public Page<Friend> findMyFriends(Long userId, Pageable pageable) {
         return friendRepository.findByToUserId(userId, pageable);
-    }
-
-    public Page<Friend> findByFromUser(Long userId, Pageable pageable) {
-        return friendRepository.findByFromUserId(userId, pageable);
     }
 
 }

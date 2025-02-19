@@ -1,5 +1,6 @@
 package com.example.newsfeed.comment.service.component;
 
+import com.example.newsfeed.comment.exception.CommentNotFoundIdException;
 import com.example.newsfeed.comment.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,4 +14,7 @@ public class CommentReader {
     private final CommentRepository commentRepository;
 
 
+    public boolean exists(Long commentId) {
+        return commentRepository.existsById(commentId);
+    }
 }
