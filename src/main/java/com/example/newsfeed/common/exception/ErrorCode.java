@@ -32,7 +32,7 @@ public enum ErrorCode {
 
     ALREADY_LIKED_POST(HttpStatus.BAD_REQUEST, "ALREADY_LIKED", "이미 '좋아요'를 누른 게시글입니다."),
     UNCHECKED(HttpStatus.BAD_REQUEST, "UNCHECKED", "체크된 항목이 아닙니다"),
-
+    SELF_POST_LIKE_NOT_ALLOWED(HttpStatus.BAD_REQUEST,"SELF_POST_LIKE_NOT_ALLOWED","본인이 작성한 게시글에는 좋아요를 누를 수 없습니다."),
     SELF_LIKE_NOT_ALLOWED(HttpStatus.BAD_REQUEST,"SELF_LIKE_NOT_ALLOWED","본인이 작성한 댓글에는 좋아요를 누를 수 없습니다."),
     ALREADY_LIKED(HttpStatus.BAD_REQUEST,"ALREADY_LIKED","이미 좋아요를 누른 댓글입니다."),
     LIKE_NOT_FOUND(HttpStatus.BAD_REQUEST,"LIKE_NOT_FOUND","좋아요를 누른 적이 없습니다."),
