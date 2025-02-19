@@ -1,6 +1,7 @@
 package com.example.newsfeed.comment.controller;
 
 import com.example.newsfeed.auth.dto.LoginUser;
+import com.example.newsfeed.comment.dto.CommentDetailResponse;
 import com.example.newsfeed.comment.dto.CommentRequest;
 import com.example.newsfeed.comment.dto.CommentResponse;
 import com.example.newsfeed.comment.service.CommentService;
@@ -43,9 +44,9 @@ public class CommentController {
 
 
     @GetMapping
-    public ResponseEntity<Response<CommentResponse>> findByPostIdToComments(@RequestParam Long postId,
-                                                                         @Valid @ModelAttribute PageRequest page) {
-        Page<CommentResponse> commentsList = commentService.findByPostIdToComments(postId, page.getSize(), page.getPage());
+    public ResponseEntity<Response<CommentDetailResponse>> findByPostIdToComments(@Login(required = false) LoginUser loginUser, @RequestParam Long postId,
+                                                                                  @Valid @ModelAttribute PageRequest page) {
+        Page<CommentDetailResponse> commentsList = commentService.findByPostIdToComments(loginUser, postId, page.getSize(), page.getPage());
         return new ResponseEntity<>(Response.fromPage(commentsList), HttpStatus.OK);
     }
 

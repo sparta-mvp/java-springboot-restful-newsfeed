@@ -49,7 +49,6 @@ public class FriendController {
         return new ResponseEntity<>(Response.fromPage(tagList), HttpStatus.OK);
     }
 
-
     // 친구 검색
     @GetMapping("/{id}")
     public ResponseEntity<Response<FriendResponse>> getFriend(@Login LoginUser loginUser, @PathVariable Long id) {

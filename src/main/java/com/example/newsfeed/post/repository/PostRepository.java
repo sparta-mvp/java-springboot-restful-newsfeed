@@ -1,5 +1,7 @@
 package com.example.newsfeed.post.repository;
 
+import com.example.newsfeed.post.dto.PostResponse;
+import com.example.newsfeed.post.dto.PostShortResponse;
 import com.example.newsfeed.post.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,4 +28,17 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByContentsContaining(String contents, Pageable pageable);
 
     Page<Post> findByKeywordContaining(String keyword, Pageable pageable);
+
+    @Query("SELECT new com.example.newsfeed.post.dto.PostShortResponse(" +
+            "p.title, p.contents, p.user.name, p.keyword, p.createdAt, p.updatedAt, COUNT(pl)) " +
+            "FROM Post p LEFT JOIN PostLike pl ON p.id = pl.post.id " +
+            "GROUP BY p ORDER BY p.updatedAt DESC")
+    Page<PostShortResponse> findAllWithLikeCnt(Pageable pageable);
+
+    @Query("SELECT new com.example.newsfeed.post.dto.PostShortResponse(" +
+            "p.title, p.contents, p.user.name, p.keyword, p.createdAt, p.updatedAt, COUNT(pl)) " +
+            "FROM Post p LEFT JOIN PostLike pl ON p.id = pl.post.id " +
+            "GROUP BY p " +
+            "ORDER BY COUNT(pl) DESC, p.updatedAt DESC")
+    Page<PostShortResponse> findAllWithLikeSorted(Pageable pageable);
 }

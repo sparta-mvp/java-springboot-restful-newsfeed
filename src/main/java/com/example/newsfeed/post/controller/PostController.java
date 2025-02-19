@@ -3,6 +3,7 @@ package com.example.newsfeed.post.controller;
 import com.example.newsfeed.auth.dto.LoginUser;
 import com.example.newsfeed.common.request.PageRequest;
 import com.example.newsfeed.common.resolvers.Login;
+import com.example.newsfeed.post.dto.PostLoggedResponse;
 import com.example.newsfeed.post.dto.PostRequest;
 import com.example.newsfeed.post.dto.PostResponse;
 import com.example.newsfeed.post.dto.PostShortResponse;
@@ -27,10 +28,17 @@ public class PostController {
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
-    // findAll
+    // findAll (default : 최신순)
     @GetMapping
     public ResponseEntity<Page<PostShortResponse>> findAllPosts(@Valid @ModelAttribute PageRequest page) {
         Page<PostShortResponse> postsList = postService.findAllPosts(page.getSize(), page.getPage());
+        return new ResponseEntity<>(postsList, HttpStatus.OK);
+    }
+
+    // findAll (좋아요순)
+    @GetMapping("/like")
+    public ResponseEntity<Page<PostShortResponse>> findAllWithLikeSorted(@Valid @ModelAttribute PageRequest page) {
+        Page<PostShortResponse> postsList = postService.findAllWithLikeSorted(page.getSize(), page.getPage());
         return new ResponseEntity<>(postsList, HttpStatus.OK);
     }
 

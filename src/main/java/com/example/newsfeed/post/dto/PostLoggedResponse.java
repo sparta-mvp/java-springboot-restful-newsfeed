@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class PostResponse {
+public class PostLoggedResponse {
     private final String title;
     private final String contents;
     private final String memberName;
@@ -14,9 +14,10 @@ public class PostResponse {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
     private final long likeCnt;
+    private final boolean isChecked;
 
-    public PostResponse(String title, String contents, String memberName, String keywords,
-                        LocalDateTime createdAt, LocalDateTime updatedAt, long likeCnt) {
+    public PostLoggedResponse(String title, String contents, String memberName, String keywords,
+                        LocalDateTime createdAt, LocalDateTime updatedAt, long likeCnt, boolean isChecked) {
         this.title = title;
         this.contents = contents;
         this.memberName = memberName;
@@ -24,9 +25,10 @@ public class PostResponse {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.likeCnt = likeCnt;
+        this.isChecked = isChecked;
     }
 
-    public PostResponse(Post post, long likeCnt) {
+    public PostLoggedResponse(Post post, long likeCnt, boolean isChecked) {
         this.title = post.getTitle();
         this.contents = post.getContents();
         this.memberName = post.getUser().getName();
@@ -34,5 +36,6 @@ public class PostResponse {
         this.createdAt = post.getCreatedAt();
         this.updatedAt = post.getUpdatedAt();
         this.likeCnt = likeCnt;
+        this.isChecked = isChecked;
     }
 }

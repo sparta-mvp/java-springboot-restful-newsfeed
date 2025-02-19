@@ -63,7 +63,6 @@ public class FriendService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
         InterestTag tag = getTag(interestTag, userId);
-        return userReader.findByTag(tag, pageable).map(user -> TagUserResponse.of(user.getId(), user.getName()));
     }
 
     public FriendResponse getFriend(Long userId, Long id) {
@@ -98,5 +97,4 @@ public class FriendService {
 
         return InterestTag.of(interestTag);
     }
-
 }
