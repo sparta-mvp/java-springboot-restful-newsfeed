@@ -1,7 +1,6 @@
-package com.example.newsfeed.friend.entity;
+package com.example.newsfeed.friendapply.entity;
 
 import com.example.newsfeed.user.entity.User;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -15,12 +14,10 @@ import lombok.Getter;
 
 @Entity
 @Getter
-@Table(
-        uniqueConstraints = {
-                @UniqueConstraint(name = "unique_friend", columnNames = {"to_user_id", "from_user_id"})
-        }
-)
-public class Friend {
+@Table(name = "apply", uniqueConstraints = {
+        @UniqueConstraint(name = "friend_apply", columnNames = {"sender_id", "receiver_id"})
+})
+public class FriendApply {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,24 +25,17 @@ public class Friend {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "id")
-    private User toUser;
+    private User sender;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "id")
-    private User fromUser;
+    private User receiver;
 
-
-
-    public Friend() {
-
+    public FriendApply() {
     }
 
-
-    public Friend(User toUser, User fromUser) {
-        this.toUser = toUser;
-        this.fromUser = fromUser;
+    public FriendApply(User sender, User receiver) {
+        this.sender = sender;
+        this.receiver = receiver;
     }
-
-
-
 }

@@ -11,6 +11,7 @@ import com.example.newsfeed.comment.service.component.CommentWriter;
 
 import com.example.newsfeed.commentlike.dto.CommentLikeCountStatusDto;
 import com.example.newsfeed.commentlike.repository.CommentLikeRepository;
+
 import com.example.newsfeed.post.entity.Post;
 import com.example.newsfeed.post.exception.PostNotFoundException;
 import com.example.newsfeed.post.service.component.PostFinder;
@@ -43,13 +44,14 @@ public class CommentService {
     private final PostFinder postFinder;
     private final PostReader postReader;
 
+
     private final CommentLikeRepository commentLikeRepository;
 
 
     public CommentResponse addComment(Long postId, LoginUser loginUser, String contents) {
 
-        Post post = postFinder.findPost(postId);
         User user = userFinder.findActive(loginUser.getUserId());
+        Post post = postFinder.findPost(postId);
 
         Comment save = commentWriter.saveComment(new Comment(user, post, contents));
         return CommentResponse.from(save);
@@ -58,6 +60,7 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public Page<CommentDetailResponse> findByPostIdToComments(LoginUser loginUser, Long postId, int pageSize, int pageNumber) {
+
 
         if (!postReader.doesExist(postId)) {
             throw new PostNotFoundException();
