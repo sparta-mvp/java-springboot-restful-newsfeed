@@ -1,6 +1,7 @@
 package com.example.newsfeed.post.service;
 
 import com.example.newsfeed.common.exception.ValidationException;
+import com.example.newsfeed.post.dto.PostLoggedResponse;
 import com.example.newsfeed.post.dto.PostResponse;
 import com.example.newsfeed.post.dto.PostShortResponse;
 import com.example.newsfeed.post.entity.Post;
@@ -8,6 +9,7 @@ import com.example.newsfeed.post.entity.SearchType;
 import com.example.newsfeed.post.service.component.PostFinder;
 import com.example.newsfeed.post.service.component.PostReader;
 import com.example.newsfeed.post.service.component.PostWriter;
+import com.example.newsfeed.post_like.service.component.PostLikeReader;
 import com.example.newsfeed.user.entity.User;
 import com.example.newsfeed.user.service.component.UserFinder;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-
-import static com.example.newsfeed.common.exception.ErrorCode.POST_NOT_FOUND;
-import static com.example.newsfeed.common.exception.ErrorCode.UNAUTHORIZED_ACCESS;
+import static com.example.newsfeed.common.exception.ErrorCode.*;
 
 
 @Service
@@ -33,8 +33,8 @@ public class PostServiceImpl implements PostService {
     private final PostWriter postWriter;
     private final PostFinder postFinder;
 
-    //private final UserReader userReader;
     private final UserFinder userFinder;
+    private final PostLikeReader postLikeReader;
 
     @Override
     @Transactional
@@ -51,8 +51,8 @@ public class PostServiceImpl implements PostService {
 
         postWriter.createPost(post);
 
-        return new PostResponse(post.getTitle(), post.getUser().getName(), post.getContents(),
-                post.getKeyword(), post.getCreatedAt(), post.getUpdatedAt());
+        return new PostResponse(post.getTitle(), post.getContents(), post.getUser().getName(),
+                post.getKeyword(), post.getCreatedAt(), post.getUpdatedAt(), 0);
     }
 
     @Override
@@ -60,17 +60,16 @@ public class PostServiceImpl implements PostService {
     public Page<PostShortResponse> findAllPosts(int pageSize, int pageNumber) {
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<Post> postPage = postFinder.findPosts(pageable);
+        return postFinder.findAll(pageable);
+    }
 
-        return postPage.map(post ->
-                new PostShortResponse(
-                        post.getTitle().substring(0, Math.min(post.getTitle().length(), 10)),
-                        post.getContents().substring(0, Math.min(post.getContents().length(), 100)),
-                        post.getUser().getName(),
-                        post.getKeyword(),
-                        post.getCreatedAt(),
-                        post.getUpdatedAt()
-                ));
+    // 좋아요순
+    @Override
+    @Transactional
+    public Page<PostShortResponse> findAllWithLikeSorted(int pageSize, int pageNumber) {
+        if(pageSize<1) throw new ValidationException(PAGE_NOT_POSITIVE);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return postFinder.findAllWithLikeSorted(pageable);
     }
 
     @Override
@@ -79,7 +78,11 @@ public class PostServiceImpl implements PostService {
         if(!postReader.doesExist(id)){
             throw new ValidationException(POST_NOT_FOUND);
         }
-        return new PostResponse(postFinder.findPost(id));
+
+        Post post = postFinder.findPost(id);
+        long likeCnt = postLikeReader.likeCountOfPost(post);
+
+        return new PostResponse(post, likeCnt);
     }
 
     @Override
@@ -96,9 +99,9 @@ public class PostServiceImpl implements PostService {
 
         post.updatePost(title, contents, keyword);
 
-        //postWriter.createPost(post);
+        long likeCnt = postLikeReader.likeCountOfPost(post);
 
-        return new PostResponse(post);
+        return new PostResponse(post, likeCnt);
     }
 
     @Override
@@ -131,12 +134,13 @@ public class PostServiceImpl implements PostService {
 
         return postPage.map(post ->
                 new PostShortResponse(
-                        post.getTitle().substring(0, Math.min(post.getTitle().length(), 10)),
-                        post.getContents().substring(0, Math.min(post.getContents().length(), 50)),
+                        post.getTitle(),
+                        post.getContents(),
                         post.getUser().getName(),
                         post.getKeyword(),
                         post.getCreatedAt(),
-                        post.getUpdatedAt()
+                        post.getUpdatedAt(),
+                        postLikeReader.likeCountOfPost(post)
                 ));
     }
 }
