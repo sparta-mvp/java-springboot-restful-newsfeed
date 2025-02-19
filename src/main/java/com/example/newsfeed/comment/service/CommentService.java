@@ -97,7 +97,7 @@ public class CommentService {
         return CommentResponse.from(saveComment);
     }
 
-
+    @Transactional
     public void deleteComment(Long id, LoginUser loginUser) {
         Comment findComment = commentFinder.getComment(id);
         if (!findComment.getUser().isSame(loginUser.getUserId())) {

@@ -1,6 +1,7 @@
 package com.example.newsfeed.post_like.service;
 
 import com.example.newsfeed.auth.dto.LoginUser;
+import com.example.newsfeed.common.exception.ErrorCode;
 import com.example.newsfeed.common.exception.ValidationException;
 import com.example.newsfeed.post.entity.Post;
 import com.example.newsfeed.post.service.component.PostFinder;
@@ -30,7 +31,7 @@ public class PostLikeService {
         Optional<PostLike> existing = postLikeRepository.findByPostAndUser(post, user);
         if(existing.isPresent()) { throw new AlreadyLikedException(); }
 
-        if(post.getUser().equals(user)) throw new ValidationException();
+        if(post.getUser().equals(user)) throw new ValidationException(ErrorCode.SELF_POST_LIKE_NOT_ALLOWED);
 
         postLikeRepository.save(new PostLike(post, user));
     }
