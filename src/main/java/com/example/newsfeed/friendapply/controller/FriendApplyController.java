@@ -2,6 +2,7 @@ package com.example.newsfeed.friendapply.controller;
 
 import com.example.newsfeed.friendapply.dto.FriendApplyRequest;
 import com.example.newsfeed.friendapply.dto.FriendApplyResponse;
+import com.example.newsfeed.friendapply.service.ApplicationDirection;
 import com.example.newsfeed.friendapply.service.FriendApplyService;
 import com.example.newsfeed.auth.dto.LoginUser;
 import com.example.newsfeed.common.request.PageRequest;

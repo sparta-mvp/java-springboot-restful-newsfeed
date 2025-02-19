@@ -1,6 +1,5 @@
 package com.example.newsfeed.friend.service;
 
-import com.example.newsfeed.friend.controller.ApplicationDirection;
 import com.example.newsfeed.friend.dto.ApplicationStatus;
 import com.example.newsfeed.friend.dto.FriendResponse;
 import com.example.newsfeed.friend.dto.TagUserResponse;

@@ -3,7 +3,6 @@ package com.example.newsfeed.friendapply.service;
 import com.example.newsfeed.friend.entity.Friend;
 import com.example.newsfeed.friend.service.component.FriendReader;
 import com.example.newsfeed.friend.service.component.FriendWriter;
-import com.example.newsfeed.friendapply.controller.ApplicationDirection;
 import com.example.newsfeed.friendapply.dto.FriendApplyResponse;
 import com.example.newsfeed.friendapply.entity.FriendApply;
 import com.example.newsfeed.friendapply.exception.DuplicateApplyException;
