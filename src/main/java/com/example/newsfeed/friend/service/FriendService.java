@@ -1,6 +1,6 @@
 package com.example.newsfeed.friend.service;
 
-import com.example.newsfeed.friend.controller.FollowType;
+import com.example.newsfeed.friend.controller.ApplicationDirection;
 import com.example.newsfeed.friend.dto.FriendResponse;
 import com.example.newsfeed.friend.dto.TagUserResponse;
 import com.example.newsfeed.friend.entity.Friend;
@@ -40,11 +40,11 @@ public class FriendService {
 
 
     @Transactional(readOnly = true)
-    public Page<FriendResponse> getFollowByType(FollowType type, Long userId, int pageNumber, int pageSize) {
+    public Page<FriendResponse> getApplyList(ApplicationDirection direction, Long userId, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<Friend> followList = getFollowList(type, userId, pageable);
+        Page< 신청Entity > applyList = getDirection(direction, userId, pageable);
 
-        return followList.map(FriendResponse::from);
+        return applyList.map(신청Response::from);
     }
 
 
@@ -81,11 +81,10 @@ public class FriendService {
         return InterestTag.of(interestTag);
     }
 
-    private Page<Friend> getFollowList(FollowType type, Long userId, Pageable pageable) {
-        if (type.equals(FollowType.FOLLOWING)) {
-            return friendReader.findByToUser(userId, pageable);
+    private Page<Friend> getDirection(ApplicationDirection type, Long userId, Pageable pageable) {
+        if (type.equals(ApplicationDirection.FROM)) {
+            return 신청Service.findByToUser(userId, pageable);
         }
-        return friendReader.findByFromUser(userId, pageable);
+        return 신청Service.findByFromUser(userId, pageable);
     }
-
 }
