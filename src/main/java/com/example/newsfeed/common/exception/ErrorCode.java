@@ -36,7 +36,9 @@ public enum ErrorCode {
     SELF_LIKE_NOT_ALLOWED(HttpStatus.BAD_REQUEST,"SELF_LIKE_NOT_ALLOWED","본인이 작성한 댓글에는 좋아요를 누를 수 없습니다."),
     ALREADY_LIKED(HttpStatus.BAD_REQUEST,"ALREADY_LIKED","이미 좋아요를 누른 댓글입니다."),
     LIKE_NOT_FOUND(HttpStatus.BAD_REQUEST,"LIKE_NOT_FOUND","좋아요를 누른 적이 없습니다."),
-    SAME_PASSWORD(HttpStatus.BAD_REQUEST,"SAME_PASSWORD", "현재 비밀번호와 동일한 비밀번호로는 변경할 수 없습니다. ");
+    SAME_PASSWORD(HttpStatus.BAD_REQUEST,"SAME_PASSWORD", "현재 비밀번호와 동일한 비밀번호로는 변경할 수 없습니다. "),
+    BOOKMARK_NOT_FOUND(HttpStatus.NOT_FOUND,"BOOKMARK_NOT_FOUND","Bookmark not found"),
+    ALREADY_BOOKMARKED(HttpStatus.BAD_REQUEST,"ALREADY_BOOKMARKED","이미 북마크한 게시글입니다.");
 
 
     private final HttpStatus status;
