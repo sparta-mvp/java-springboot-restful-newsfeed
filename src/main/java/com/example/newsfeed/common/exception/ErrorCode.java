@@ -22,9 +22,8 @@ public enum ErrorCode {
     FRIEND_NOT_FOUND(HttpStatus.NOT_FOUND,"FRIEND_NOT_FOUND","친구를 찾을 수 없습니다."),
     DUPLICATE_FRIEND(HttpStatus.BAD_REQUEST,"DUPLICATE_FRIEND","이미 친구 관계 입니다."),
     NOT_FRIEND(HttpStatus.BAD_REQUEST,"NOT_FRIEND","친구가 아닙니다."),
-    INVALID_FOLLOW_TYPE(HttpStatus.BAD_REQUEST, "INVALID_FOLLOW_TYPE", "FOLLOWING 또는 FOLLOWER 검색만 가능합니다."),
-    ALREADY_LIKED(HttpStatus.BAD_REQUEST, "ALREADY_LIKED", "이미 '좋아요'를 누른 게시글입니다."),
-    UNCHECKED(HttpStatus.BAD_REQUEST, "UNCHECKED", "체크된 항목이 아닙니다");
+    ALREADY_LIKED_POST(HttpStatus.BAD_REQUEST, "ALREADY_LIKED", "이미 '좋아요'를 누른 게시글입니다."),
+    UNCHECKED(HttpStatus.BAD_REQUEST, "UNCHECKED", "체크된 항목이 아닙니다"),
     INVALID_DIRECTION(HttpStatus.BAD_REQUEST, "INVALID_DIRECTION", "FROM과 TO에 대한 결과만 조회 가능합니다."),
     INVALID_FOLLOW_TYPE(HttpStatus.BAD_REQUEST, "INVALID_FOLLOW_TYPE", "FOLLOWING 또는 FOLLOWER 검색만 가능합니다."),
     SELF_LIKE_NOT_ALLOWED(HttpStatus.BAD_REQUEST,"SELF_LIKE_NOT_ALLOWED","본인이 작성한 댓글에는 좋아요를 누를 수 없습니다."),
