@@ -1,12 +1,15 @@
 package com.example.newsfeed.user.service.component;
 
+import com.example.newsfeed.user.entity.InterestTag;
 import com.example.newsfeed.user.entity.User;
+import com.example.newsfeed.user.entity.UserStatus;
 import com.example.newsfeed.user.repository.UserRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,4 +26,10 @@ public class UserReader {
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
+
+    public Page<User> findByTag(InterestTag tag, Pageable pageable) {
+        return userRepository.findByInterestTagAndStatus(tag, UserStatus.ACTIVE, pageable);
+    }
+
 }
