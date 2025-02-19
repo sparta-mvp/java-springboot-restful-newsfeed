@@ -9,12 +9,8 @@ import com.example.newsfeed.comment.exception.InvalidCommentUserException;
 import com.example.newsfeed.comment.service.component.CommentFinder;
 import com.example.newsfeed.comment.service.component.CommentWriter;
 
-<<<<<<< HEAD
 import com.example.newsfeed.commentlike.dto.CommentLikeCountStatusDto;
 import com.example.newsfeed.commentlike.repository.CommentLikeRepository;
-
-=======
->>>>>>> 0c66866 (Core(friend): apply에 올라갈 method 임의 삭제)
 import com.example.newsfeed.post.entity.Post;
 import com.example.newsfeed.post.exception.PostNotFoundException;
 import com.example.newsfeed.post.service.component.PostFinder;
@@ -47,12 +43,8 @@ public class CommentService {
     private final PostFinder postFinder;
     private final PostReader postReader;
 
-<<<<<<< HEAD
 
     private final CommentLikeRepository commentLikeRepository;
-
-=======
->>>>>>> 0c66866 (Core(friend): apply에 올라갈 method 임의 삭제)
 
     public CommentResponse addComment(Long postId, LoginUser loginUser, String contents) {
 
@@ -64,14 +56,8 @@ public class CommentService {
     }
 
 
-<<<<<<< HEAD
     @Transactional(readOnly = true)
     public Page<CommentDetailResponse> findByPostIdToComments(LoginUser loginUser, Long postId, int pageSize, int pageNumber) {
-
-=======
-    public Page<CommentResponse> findByPostIdToComments(Long postId, int pageSize, int pageNumber) {
->>>>>>> 0c66866 (Core(friend): apply에 올라갈 method 임의 삭제)
-
         if (!postReader.doesExist(postId)) {
             throw new PostNotFoundException();
         }

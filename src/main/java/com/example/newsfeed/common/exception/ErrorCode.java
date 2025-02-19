@@ -28,7 +28,7 @@ public enum ErrorCode {
     FRIEND_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "FRIEND_ALREADY_EXISTS", "이미 존재하는 친구입니다."),
     APPLY_NOT_FOUND(HttpStatus.NOT_FOUND, "APPLY_NOT_FOUND", "존재하지 않는 요청입니다."),
     SELF_APPLY(HttpStatus.BAD_REQUEST, "SELF_APPLY", "자신에게는 친구 신청을 할 수 없습니다."),
-    DUPLICATE_APPLY(HttpStatus.BAD_REQUEST, "DUPLICATE_APPLY","이미 존재하는 요청입니다.");
+    DUPLICATE_APPLY(HttpStatus.BAD_REQUEST, "DUPLICATE_APPLY","이미 존재하는 요청입니다."),
 
     ALREADY_LIKED_POST(HttpStatus.BAD_REQUEST, "ALREADY_LIKED", "이미 '좋아요'를 누른 게시글입니다."),
     UNCHECKED(HttpStatus.BAD_REQUEST, "UNCHECKED", "체크된 항목이 아닙니다"),
