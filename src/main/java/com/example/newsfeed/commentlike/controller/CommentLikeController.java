@@ -1,4 +1,4 @@
-package com.example.newsfeed.commentlike;
+package com.example.newsfeed.commentlike.controller;
 
 import com.example.newsfeed.auth.dto.LoginUser;
 import com.example.newsfeed.commentlike.dto.CommentLikeResponse;
@@ -30,13 +30,13 @@ public class CommentLikeController {
     }
 
     @DeleteMapping
-    public Response<Void> unlikeComment(@Login LoginUser loginUser, @RequestParam Long commentId){
+    public Response<Void> unLikeComment(@Login LoginUser loginUser, @RequestParam Long commentId){
         commentLikeService.unLikeComment(commentId, loginUser);
         return Response.empty();
     }
 
     @GetMapping
-    public Response<CommentLikeResponse> getCommentLikeStatus(@Login LoginUser loginUser, @RequestParam Long commentId) {
+    public Response<CommentLikeResponse> getCommentLikeStatus(@Login(required = false) LoginUser loginUser, @RequestParam Long commentId) {
         return Response.of(commentLikeService.getCommentLikeStatus(loginUser,commentId));
     }
 
