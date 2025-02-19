@@ -11,6 +11,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import java.lang.reflect.AnnotatedElement;
+
 public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -22,10 +24,14 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest httpRequest = (HttpServletRequest) webRequest.getNativeRequest();
         HttpSession session = httpRequest.getSession(false);
-        if (session == null || session.getAttribute(SessionConst.LOGIN_USER) == null) {
+
+        Login loginAnnotation = parameter.getParameterAnnotation(Login.class);
+        boolean required = (loginAnnotation != null) && loginAnnotation.required();
+
+        if (required && (session == null || session.getAttribute(SessionConst.LOGIN_USER) == null)) {
             throw new UnAuthorizedException();
         }
-        return session.getAttribute(SessionConst.LOGIN_USER);
+        return (session != null ) ? session.getAttribute(SessionConst.LOGIN_USER) : null;
 
     }
 
