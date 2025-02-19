@@ -1,50 +1,45 @@
 package com.example.newsfeed.commentlike.repository;
 
+import com.example.newsfeed.commentlike.dto.CommentLikeCountStatusDto;
 import com.example.newsfeed.commentlike.entity.CommentLike;
-import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 
 @Repository
-@RequiredArgsConstructor
-public class CommentLikeRepository {
+public interface CommentLikeRepository extends JpaRepository<CommentLike,Long> {
 
-    private final EntityManager em;
 
-    public boolean existsByCommentIdAndUserId(Long commentId, Long userId) {
-        boolean present = em.createQuery("select cl from CommentLike cl where cl.comment.id = :commentId and cl.user.id = :userId")
-                .setParameter("commentId", commentId)
-                .setParameter("userId", userId)
-                .setMaxResults(1)
-                .getResultStream()
-                .findFirst()
-                .isPresent();
-        return present;
+    @Query("select CASE WHEN count(cl) > 0 then true else false end from CommentLike cl where cl.comment.id = :commentId and cl.user.id = :userId")
+    boolean existsByCommentIdAndUserId(Long commentId, Long userId);
 
-    }
+    @Query("select cl from CommentLike cl where cl.comment.id = :commentId and cl.user.id = :userId")
+     Optional<CommentLike> findByCommentIdAndUserId(Long commentId, Long userId);
 
-    public void save(CommentLike commentLike) {
-        em.persist(commentLike);
-    }
+    Long countByCommentId(Long commentId);
 
-    public long countByCommentId(Long commentId) {
-        return em.createQuery("select count(cl) from CommentLike cl where cl.comment.id = :commentId", Long.class)
-                .setParameter("commentId",commentId)
-                .getSingleResult();
-    }
+    @Query("select new com.example.newsfeed.commentlike.dto.CommentLikeCountStatusDto(" +
+            "cl.comment.id ," +
+            " count(cl) as ," +
+            "case when count(case when cl.user.id = :userId then 1 else 0 end) > 0 then true else false end)" +
+            " from CommentLike cl " +
+            " where cl.comment.id in :commentIds " +
+            "group by cl.comment.id"
+    )
+    List<CommentLikeCountStatusDto> findCommentsLikeCountAndStatus(List<Long> commentIds, Long userId);
 
-    public Optional<CommentLike> findByCommentIdAndUserId(Long commentId, Long userId) {
-        return em.createQuery("select cl from CommentLike cl where cl.comment.id = :commentId and cl.user.id = :userId", CommentLike.class)
-                .setParameter("commentId", commentId)
-                .setParameter("userId", userId)
-                .getResultStream()
-                .findFirst();
-    }
+    @Query("select new com.example.newsfeed.commentlike.dto.CommentLikeCountStatusDto(" +
+            "cl.comment.id ," +
+            " count(cl) )" +
+            "from CommentLike cl " +
+            "where cl.comment.id in :commentIds " +
+            "group by cl.comment.id"
+    )
+    List<CommentLikeCountStatusDto> findCommentsLikeCount(List<Long> commentIds);
 
-    public void delete(CommentLike commentLike) {
-        em.remove(commentLike);
-    }
+
 }
