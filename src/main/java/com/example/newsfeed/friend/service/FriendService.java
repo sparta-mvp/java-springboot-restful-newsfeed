@@ -1,5 +1,6 @@
 package com.example.newsfeed.friend.service;
 
+import com.example.newsfeed.friend.controller.ApplicationDirection;
 import com.example.newsfeed.friend.dto.ApplicationStatus;
 import com.example.newsfeed.friend.dto.FriendResponse;
 import com.example.newsfeed.friend.dto.TagUserResponse;
@@ -58,6 +59,7 @@ public class FriendService {
     }
 
 
+    @Transactional(readOnly = true)
     public Page<TagUserResponse> findByTag(String interestTag, Long userId, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
 

@@ -1,14 +1,12 @@
 package com.example.newsfeed.comment.service;
 
 import com.example.newsfeed.auth.dto.LoginUser;
-
 import com.example.newsfeed.comment.dto.CommentDetailResponse;
 import com.example.newsfeed.comment.dto.CommentResponse;
 import com.example.newsfeed.comment.entity.Comment;
 import com.example.newsfeed.comment.exception.InvalidCommentUserException;
 import com.example.newsfeed.comment.service.component.CommentFinder;
 import com.example.newsfeed.comment.service.component.CommentWriter;
-
 import com.example.newsfeed.commentlike.dto.CommentLikeCountStatusDto;
 import com.example.newsfeed.commentlike.repository.CommentLikeRepository;
 import com.example.newsfeed.post.entity.Post;
@@ -17,13 +15,10 @@ import com.example.newsfeed.post.service.component.PostFinder;
 import com.example.newsfeed.post.service.component.PostReader;
 import com.example.newsfeed.user.entity.User;
 import com.example.newsfeed.user.service.component.UserFinder;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -97,7 +92,7 @@ public class CommentService {
         return CommentResponse.from(saveComment);
     }
 
-
+    @Transactional
     public void deleteComment(Long id, LoginUser loginUser) {
         Comment findComment = commentFinder.getComment(id);
         if (!findComment.getUser().isSame(loginUser.getUserId())) {
