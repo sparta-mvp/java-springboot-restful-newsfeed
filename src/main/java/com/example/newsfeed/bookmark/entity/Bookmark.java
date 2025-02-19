@@ -12,6 +12,15 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Table(name = "bookmark", uniqueConstraints = {
+        @UniqueConstraint(
+                name = "unique_bookmark",
+                columnNames = {
+                        "bookmark_user_id",
+                        "bookmark_post_id"
+                }
+        )
+})
 public class Bookmark extends BaseEntity {
     public Bookmark() {}
 
