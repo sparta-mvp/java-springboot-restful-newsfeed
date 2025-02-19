@@ -1,6 +1,9 @@
 package com.example.newsfeed.friend.service;
 
+<<<<<<< HEAD
 import com.example.newsfeed.friend.dto.ApplicationStatus;
+=======
+>>>>>>> 0c66866 (Core(friend): apply에 올라갈 method 임의 삭제)
 import com.example.newsfeed.friend.dto.FriendResponse;
 import com.example.newsfeed.friend.dto.TagUserResponse;
 import com.example.newsfeed.friend.entity.Friend;
@@ -21,7 +24,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -65,7 +67,10 @@ public class FriendService {
         return userReader.findByTag(tag, pageable).map(user -> TagUserResponse.of(user.getId(), user.getName()));
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0c66866 (Core(friend): apply에 올라갈 method 임의 삭제)
     public FriendResponse getFriend(Long userId, Long id) {
         Friend friend = friendFinder.getFriend(userId, id);
         return FriendResponse.from(friend);

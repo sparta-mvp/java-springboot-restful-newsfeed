@@ -48,6 +48,10 @@ public class FriendController {
         return new ResponseEntity<>(Response.fromPage(tagList), HttpStatus.OK);
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0c66866 (Core(friend): apply에 올라갈 method 임의 삭제)
     // 친구 검색
     @GetMapping("/{id}")
     public ResponseEntity<Response<FriendResponse>> getFriend(@Login LoginUser loginUser, @PathVariable Long id) {
