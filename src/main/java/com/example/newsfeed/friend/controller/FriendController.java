@@ -43,17 +43,6 @@ public class FriendController {
     }
 
 
-    // 내가 '친구 신청'을 한 목록 / 나에게 '친구 신청'을 한 목록 조회
-    @GetMapping
-    public ResponseEntity<Response<FriendResponse>> getApplyList(@RequestParam(name = "direct") String direct,
-                                                              @Login LoginUser loginUser,
-                                                              @Valid @ModelAttribute PageRequest page) {
-
-        Page<FriendResponse> applyList = friendService.getApplyList(ApplicationDirection.of(direct), loginUser.getUserId(), page.getPage(), page.getSize());
-        return new ResponseEntity<>(Response.fromPage(applyList), HttpStatus.OK);
-    }
-
-
     // 친구 검색
     @GetMapping("/{id}")
     public ResponseEntity<Response<FriendResponse>> getFriend(@Login LoginUser loginUser, @PathVariable Long id) {
