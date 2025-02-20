@@ -117,7 +117,15 @@ CREATE TABLE comment
 
 🔖 Bookmarks
 ```sql
-작성
+CREATE TABLE bookmark
+(
+    bookmark_id      bigint auto_increment primary key,
+    bookmark_post_id bigint      not null,
+    bookmark_user_id bigint      not null,
+    created_at       datetime(6) null,
+    updated_at       datetime(6) null,
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (post_id) REFERENCES post(id)
 ```
 
 <br><br><hr><br>
