@@ -19,25 +19,46 @@
 <br><br><br>
 
 ## 목차
-[1. API 명세서 작성](#api-명세서) <br>
+[1. API 및 기능 명세서](#api-및-기능-명세서) <br>
 [2. ERD 작성](#erd) <br>
 [3. SQL 작성](#sql) <br>
-[4. 요청 및 응답](#dto) <br>
-[5. 트러블 슈팅](#troubleshooting) <br>
-[6. 예외 처리](#exception) <br>
+[4. 트러블 슈팅](#troubleshooting) <br>
+[5. 예외 처리](#exception) <br>
 
 <br><br><br>
 
 ## 설계
 
-### API 명세서
-![image](https://github.com/user-attachments/assets/3c39d957-0d78-44ae-bcd0-3af544adfc8c)
-![image](https://github.com/user-attachments/assets/69b832df-0fbc-4dc2-b835-370827bdf61d)
-![image](https://github.com/user-attachments/assets/aa5ffad6-7e60-43a8-9919-110ce3217d42)
-![image](https://github.com/user-attachments/assets/e654c554-c103-4fc6-a99a-15a07551fc72)
-
-
+### API 및 기능 명세서
 <br>
+
+#### 👤 Users
+![users1](https://github.com/user-attachments/assets/95c9a833-75a3-42cf-8ac7-2405bdd7073e)
+![users2](https://github.com/user-attachments/assets/fac660c0-e820-4d0b-a342-69506b341e1d)
+
+<br><br>
+
+#### 📑 Posts
+![posts1](https://github.com/user-attachments/assets/c38f05c7-a7e0-4a97-8bd9-195d7f1c327c)
+![posts2](https://github.com/user-attachments/assets/6d55c677-23d7-4648-85ab-3dfc57d5f904)
+
+<br><br>
+
+#### 🏷️ Comments
+![comments](https://github.com/user-attachments/assets/2f01f057-6222-4cb6-8641-1d2d99ba178a)
+
+<br><br>
+
+#### 👥 Friends
+![friends1](https://github.com/user-attachments/assets/5ecb660b-2ad7-4e7b-b22d-c8a5e5c6c4f2)
+![friedns2](https://github.com/user-attachments/assets/68ef93df-cf92-4339-8b42-76c872740a9a)
+
+<br><br>
+
+#### 🔖 Bookmarks
+![bookmarks](https://github.com/user-attachments/assets/cdd31ffe-bf8d-4f25-a545-0f1c94ff3ef9)
+
+<br><br>
 
 🔐 인증/인가: Session
 
@@ -49,18 +70,7 @@
 <br><br><hr><br>
 
 ### ERD
-![image](https://github.com/user-attachments/assets/c04a30c6-b2ba-480c-af43-610bd91030ce)
-
-
-<br>
-
-✅ user와 post는 1:N 관계
-✅ like, bookmark는 user:post의 N:M 관계
-
-✅ post와 comment는 1:N 관계
-✅ comment_like는 post:comment의 N:M 관계
-<br>
-　　→  N:M 관계는 관계 테이블 → entity로 구현<br>
+<img width="962" alt="Image" src="https://github.com/user-attachments/assets/b39cad0a-83d5-455a-995a-6854148f5c26" />
 
 <br><br><hr><br>
 
@@ -158,6 +168,7 @@ CREATE TABLE apply (
 ```
 
 <br>
+
 👥 Friends
 
 ```sql
@@ -188,48 +199,40 @@ CREATE TABLE bookmark (
 
 <br><br><hr><br>
 
-### DTO
-
-<br>
-
-👤 User <p>
-![image](https://github.com/user-attachments/assets/2174523c-9f0d-4760-a242-b439e03c9344)
-
-<br>
-
-📑 Schedule <p>
-![image](https://github.com/user-attachments/assets/130ca238-a075-4730-84e7-36f2271f553a)
-
-<br>
-
-🏷️ Comment <p>
-![image](https://github.com/user-attachments/assets/ae29ba35-96e1-40e0-98fb-ead935ee6d3b)
-
-<br>
-
-👥 Friends <p>
-![image](https://github.com/user-attachments/assets/ae29ba35-96e1-40e0-98fb-ead935ee6d3b)
-
-<br>
-
-🔖 Bookmarks <p>
-![image](https://github.com/user-attachments/assets/ae29ba35-96e1-40e0-98fb-ead935ee6d3b)
-
-<br><br>
-
-☑️ headers-session: password를 대신해 유저 정보를 확인해줄 인증 수단<p>
-　　user의 path-id : user의 PK<br>
-　　schedule의 path-id : schedule의 PK → comment에서 FK로 사용<br>
-　　comment의 path-id : comment의 PK<br>
-
-
-<br><br><hr><br>
-
 ### troubleshooting
 
 <br>
 
-작성
+![image](https://github.com/user-attachments/assets/a1d4ef32-2fb4-4b59-8d39-c20bd4694018)
+
+<br><br>
+
+🔎 상황 <p>
+댓글 목록 조회 시 작성자(User)와 게시글 제목(Post) 정보를 함께 반환.<br>
+Comment entity에서 User와 Post를 @ManyToOne(fetch = FetchType.LAZY)로 설정.<br>
+CommentResponseDto에서 getUser().getName() 또는 getPost().getTitle()을 호출하면 추가 쿼리가 발생<br>
+
+<br><br>
+
+💥 N+1 문제 발생 <p>
+1개 쿼리 후 추가적으로 N개의 쿼리가 발생하는 비효율적인 데이터 조회 문제 <br>
+
+<br><br>
+
+🚀 JOIN FETCH 활용으로 해결<p>
+
+<br>
+
+![image](https://github.com/user-attachments/assets/dfe5274b-66ab-4484-86a6-9c812b43f4ec)
+
+<br>
+
+✅ JOIN FETCH가 적용된 후,<p>
+findCommentsWithPostAndUserByPostId() 실행 시<br>
+Comment 엔티티를 조회하면서 즉시 User와 Post 객체를 함께 호출<br>
+<br>
+따라서 proxy 객체가 아니라 실제 entity 로드<br>
+추가적인 LazyInitializationException 없이 getUser().getName() 안전하게 호출 가능
 
 <br><br><hr><br>
 
@@ -237,6 +240,12 @@ CREATE TABLE bookmark (
 
 <br>
 
-작성
+![image](https://github.com/user-attachments/assets/9c393839-5e0e-41d2-961a-41c73f28b658)
+
+🎯 common/exception/ErrorCode.java
+
+<br>
+
+_※ 모든 예외가 아닌 일부 예외 작성_
 
 <br><br>
