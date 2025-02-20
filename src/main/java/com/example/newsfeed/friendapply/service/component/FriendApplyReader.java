@@ -24,7 +24,7 @@ public class FriendApplyReader {
         return applyRepository.findByReceiverId(userId, pageable);
     }
 
-    public boolean isExist(Long toUserId, Long fromUserId){
+    public boolean isExist(Long toUserId, Long fromUserId) {
         return applyRepository.existsBySenderIdAndReceiverId(toUserId, fromUserId);
     }
 

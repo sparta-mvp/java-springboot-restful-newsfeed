@@ -15,8 +15,8 @@ public class FriendApplyFinder {
     private final FriendApplyRepository applyRepository;
 
 
-    public FriendApply getSentRequestsToUser(Long sender, Long receiver){
-        return applyRepository.findBySenderIdAndReceiverId(sender, receiver).orElseThrow( () -> new NotFoundApplyException());
+    public FriendApply getSentRequestsToUser(Long sender, Long receiver) {
+        return applyRepository.findBySenderIdAndReceiverId(sender, receiver).orElseThrow(() -> new NotFoundApplyException());
     }
 
 }

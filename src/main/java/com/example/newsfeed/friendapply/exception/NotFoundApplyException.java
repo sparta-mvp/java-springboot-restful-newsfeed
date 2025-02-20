@@ -4,7 +4,7 @@ import com.example.newsfeed.common.exception.ErrorCode;
 import com.example.newsfeed.common.exception.NewsfeedAppException;
 
 public class NotFoundApplyException extends NewsfeedAppException {
-    public NotFoundApplyException(){
+    public NotFoundApplyException() {
         super(ErrorCode.APPLY_NOT_FOUND);
     }
 }

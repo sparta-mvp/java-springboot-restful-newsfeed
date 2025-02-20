@@ -12,7 +12,9 @@ public class BookmarkWriter {
     private final BookmarkRepository bookmarkRepository;
 
     @Transactional
-    public void saveBookmark(Bookmark bookmark) { bookmarkRepository.save(bookmark);}
+    public void saveBookmark(Bookmark bookmark) {
+        bookmarkRepository.save(bookmark);
+    }
 
     @Transactional
     public void deleteBookmark(Long bookmarkId) {

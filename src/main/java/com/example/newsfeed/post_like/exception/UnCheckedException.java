@@ -4,5 +4,7 @@ import com.example.newsfeed.common.exception.ErrorCode;
 import com.example.newsfeed.common.exception.NewsfeedAppException;
 
 public class UnCheckedException extends NewsfeedAppException {
-    public UnCheckedException() {super(ErrorCode.UNCHECKED); }
+    public UnCheckedException() {
+        super(ErrorCode.UNCHECKED);
+    }
 }

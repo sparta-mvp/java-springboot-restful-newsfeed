@@ -13,6 +13,6 @@ public class CommentLikeResponse {
     }
 
     public static CommentLikeResponse of(long likeCount, boolean isLiked) {
-        return new CommentLikeResponse(likeCount,isLiked);
+        return new CommentLikeResponse(likeCount, isLiked);
     }
 }

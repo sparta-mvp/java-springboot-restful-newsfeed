@@ -15,7 +15,7 @@ public class UserWriter {
     private final UserRepository userRepository;
 
     public void create(String name, String encodedPassword, String email, InterestTag interestTag) {
-        User user = new User(name,encodedPassword, email,interestTag);
+        User user = new User(name, encodedPassword, email, interestTag);
         userRepository.save(user);
     }
 }

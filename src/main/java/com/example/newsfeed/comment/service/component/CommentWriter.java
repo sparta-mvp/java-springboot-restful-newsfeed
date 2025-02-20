@@ -11,11 +11,11 @@ public class CommentWriter {
 
     private final CommentRepository commentRepository;
 
-    public Comment saveComment(Comment comment){
+    public Comment saveComment(Comment comment) {
         return commentRepository.save(comment);
     }
 
-    public void deleteComment(Long deleteId){
+    public void deleteComment(Long deleteId) {
         commentRepository.deleteById(deleteId);
     }
 

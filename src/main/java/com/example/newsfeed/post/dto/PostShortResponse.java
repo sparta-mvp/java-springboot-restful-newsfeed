@@ -1,9 +1,8 @@
 package com.example.newsfeed.post.dto;
 
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-
 import java.time.LocalDateTime;
+import lombok.Getter;
 
 @Getter
 public class PostShortResponse {

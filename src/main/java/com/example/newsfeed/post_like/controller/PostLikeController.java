@@ -4,7 +4,10 @@ import com.example.newsfeed.auth.dto.LoginUser;
 import com.example.newsfeed.common.resolvers.Login;
 import com.example.newsfeed.common.response.Response;
 import com.example.newsfeed.post_like.service.PostLikeService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -16,7 +19,7 @@ public class PostLikeController {
     }
 
     @PostMapping("/{postId}/like")
-    public Response<Void> likePost(@Login LoginUser loginUser, @PathVariable Long postId){
+    public Response<Void> likePost(@Login LoginUser loginUser, @PathVariable Long postId) {
         postLikeService.likePost(loginUser, postId);
         return Response.empty();
     }

@@ -1,5 +1,6 @@
 package com.example.newsfeed.comment.entity;
 
+import com.example.newsfeed.common.entity.BaseEntity;
 import com.example.newsfeed.post.entity.Post;
 import com.example.newsfeed.user.entity.User;
 import jakarta.persistence.Column;
@@ -19,7 +20,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @Getter
-public class Comment {
+public class Comment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,28 +37,11 @@ public class Comment {
     @Column(nullable = false)
     private String contents;
 
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
 
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
-
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+    public Comment() {
     }
 
-    @PreUpdate
-    public void preUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
-
-
-    public Comment(){}
-
-    public Comment(User user, Post post, String contents){
+    public Comment(User user, Post post, String contents) {
         this.user = user;
         this.post = post;
         this.contents = contents;

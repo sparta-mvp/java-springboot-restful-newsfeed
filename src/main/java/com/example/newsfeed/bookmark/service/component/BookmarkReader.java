@@ -4,11 +4,10 @@ import com.example.newsfeed.bookmark.entity.Bookmark;
 import com.example.newsfeed.bookmark.repository.BookmarkRepository;
 import com.example.newsfeed.post.entity.Post;
 import com.example.newsfeed.user.entity.User;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

@@ -11,8 +11,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import java.lang.reflect.AnnotatedElement;
-
 public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -31,7 +29,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
         if (required && (session == null || session.getAttribute(SessionConst.LOGIN_USER) == null)) {
             throw new UnAuthorizedException();
         }
-        return (session != null ) ? session.getAttribute(SessionConst.LOGIN_USER) : null;
+        return (session != null) ? session.getAttribute(SessionConst.LOGIN_USER) : null;
 
     }
 

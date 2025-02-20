@@ -37,6 +37,7 @@ public class FriendService {
     private final FriendApplyWriter applyWriter;
 
 
+    @Transactional
     public String addFriendOrRefuse(Long userId, Long applicant, ApplicationStatus status) {
         if (friendReader.isExist(userId, applicant)) {
             throw new DuplicateRelationshipException();
@@ -45,15 +46,15 @@ public class FriendService {
         FriendApply sendUser = applyFinder.getSentRequestsToUser(applicant, userId);
         applyWriter.deleteApply(sendUser);
 
-            if (status.getMessage().equals("Y")) {
+        if (status.getMessage().equals("Y")) {
 
-                User user1 = userFinder.findActive(userId);
-                User user2 = userFinder.findActive(applicant);
-                Friend friend = new Friend(user1, user2);
+            User user1 = userFinder.findActive(userId);
+            User user2 = userFinder.findActive(applicant);
+            Friend friend = new Friend(user1, user2);
 
-                friendWriter.saveFriend(friend);
-                return "친구 수락";
-            }
+            friendWriter.saveFriend(friend);
+            return "친구 수락";
+        }
         return "친구 거절";
     }
 
@@ -67,6 +68,7 @@ public class FriendService {
     }
 
 
+    @Transactional
     public FriendResponse getFriend(Long userId, Long id) {
         Friend friend = friendFinder.getFriend(userId, id);
         return FriendResponse.from(friend);

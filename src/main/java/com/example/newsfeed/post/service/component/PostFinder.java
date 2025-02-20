@@ -17,14 +17,10 @@ public class PostFinder {
 
     @Transactional
     public Post findPost(Long postId) {
-        return postRepository.findById(postId).orElseThrow(()-> new PostNotFoundException());
+        return postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException());
     }
 
-//    public Page<Post> findPosts(Pageable pageable) {
-//        return postRepository.findAll(pageable);
-//    }
-
-    public Page<PostShortResponse> findAll (Pageable pageable) {
+    public Page<PostShortResponse> findAll(Pageable pageable) {
         return postRepository.findAllWithLikeCnt(pageable);
     }
 
@@ -45,7 +41,7 @@ public class PostFinder {
         return postRepository.findByContentsContaining(query, pageable);
     }
 
-    public  Page<Post> searchPostsWithKeyWords(Pageable pageable, String query) {
+    public Page<Post> searchPostsWithKeyWords(Pageable pageable, String query) {
         return postRepository.findByKeywordContaining(query, pageable);
     }
 }

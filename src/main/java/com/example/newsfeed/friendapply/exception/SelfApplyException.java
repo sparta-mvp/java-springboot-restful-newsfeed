@@ -4,7 +4,7 @@ import com.example.newsfeed.common.exception.ErrorCode;
 import com.example.newsfeed.common.exception.NewsfeedAppException;
 
 public class SelfApplyException extends NewsfeedAppException {
-    public SelfApplyException(){
+    public SelfApplyException() {
         super(ErrorCode.SELF_APPLY);
     }
 }

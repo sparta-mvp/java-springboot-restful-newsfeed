@@ -2,9 +2,8 @@ package com.example.newsfeed.common.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.springframework.util.StringUtils;
-
 import java.util.Arrays;
+import org.springframework.util.StringUtils;
 
 public class EnumValidator implements ConstraintValidator<EnumValid, String> {
 

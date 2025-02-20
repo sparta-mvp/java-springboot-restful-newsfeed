@@ -4,7 +4,7 @@ import com.example.newsfeed.common.exception.ErrorCode;
 import com.example.newsfeed.common.exception.NewsfeedAppException;
 
 public class NotValidDirectionException extends NewsfeedAppException {
-    public NotValidDirectionException(){
+    public NotValidDirectionException() {
         super(ErrorCode.INVALID_DIRECTION);
     }
 }

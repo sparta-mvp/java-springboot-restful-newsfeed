@@ -9,9 +9,4 @@ public class LoginFailedException extends NewsfeedAppException {
         super(ErrorCode.LOGIN_FAILED);
     }
 
-    public LoginFailedException(UserNotFoundException e) {
-        super(ErrorCode.LOGIN_FAILED, e);
-    }
-
-
 }

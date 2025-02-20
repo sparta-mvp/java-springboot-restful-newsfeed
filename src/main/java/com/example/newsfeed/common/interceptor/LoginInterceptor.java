@@ -5,13 +5,12 @@ import com.example.newsfeed.common.constant.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.Set;
 import org.springframework.http.server.PathContainer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.util.pattern.PathPattern;
 import org.springframework.web.util.pattern.PathPatternParser;
-
-import java.util.Set;
 
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
@@ -44,7 +43,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     }
 
     private boolean isWhitelisted(String requestURI) {
-        return WHITE_LIST_GET_ENDPOINTS.stream().anyMatch(pattern ->{
+        return WHITE_LIST_GET_ENDPOINTS.stream().anyMatch(pattern -> {
             PathPattern pathPattern = patternParser.parse(pattern);
             return pathPattern.matches(PathContainer.parsePath(requestURI));
         });

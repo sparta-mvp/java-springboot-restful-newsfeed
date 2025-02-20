@@ -49,7 +49,7 @@ public class BookmarkService {
         Bookmark bookmark = new Bookmark(user, post);
         bookmarkWriter.saveBookmark(bookmark);
 
-        return new BookmarkResponse(bookmark.getId(),bookmark.getUser().getId(),bookmark.getPost().getId());
+        return new BookmarkResponse(bookmark.getId(), bookmark.getUser().getId(), bookmark.getPost().getId());
     }
 
     /**
