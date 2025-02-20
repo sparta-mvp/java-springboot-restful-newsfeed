@@ -1,6 +1,7 @@
 package com.example.newsfeed.post.controller;
 
 import com.example.newsfeed.common.request.PageRequest;
+import com.example.newsfeed.common.response.Response;
 import com.example.newsfeed.post.dto.PostShortResponse;
 import com.example.newsfeed.post.entity.SearchType;
 import com.example.newsfeed.post.service.PostService;
@@ -21,7 +22,7 @@ public class SearchController {
 
     // 구분 X
     @GetMapping
-    public ResponseEntity<Page<PostShortResponse>> searchPosts(
+    public ResponseEntity<Response<PostShortResponse>> searchPosts(
             @Valid @ModelAttribute PageRequest page,
             @RequestParam(required = false) String all,
             @RequestParam(required = false) String title,
@@ -43,11 +44,11 @@ public class SearchController {
 
         if (query == null) {
             Page<PostShortResponse> postsList = postService.findAllPosts(page.getSize(), page.getPage());
-            return new ResponseEntity<>(postsList, HttpStatus.OK);
+            return new ResponseEntity<>(Response.fromPage(postsList), HttpStatus.OK);
         }
 
         Page<PostShortResponse> postsLists = postService.findWithQuery(searchType, query, page.getSize(), page.getPage());
-        return new ResponseEntity<>(postsLists, HttpStatus.OK);
+        return new ResponseEntity<>(Response.fromPage(postsLists), HttpStatus.OK);
     }
 
 }
