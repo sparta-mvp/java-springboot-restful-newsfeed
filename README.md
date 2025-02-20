@@ -159,6 +159,7 @@ CREATE TABLE apply (
 
 <br>
 👥 Friends
+
 ```sql
 CREATE TABLE friend (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
