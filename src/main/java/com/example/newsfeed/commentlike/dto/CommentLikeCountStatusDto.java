@@ -17,6 +17,6 @@ public class CommentLikeCountStatusDto {
     }
 
     public CommentLikeCountStatusDto(Long commentId, Long count) {
-        this(commentId,count,false);
+        this(commentId, count, false);
     }
 }

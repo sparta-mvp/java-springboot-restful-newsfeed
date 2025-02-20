@@ -3,15 +3,18 @@ package com.example.newsfeed.post.controller;
 import com.example.newsfeed.common.request.PageRequest;
 import com.example.newsfeed.post.dto.PostShortResponse;
 import com.example.newsfeed.post.entity.SearchType;
+import static com.example.newsfeed.post.entity.SearchType.*;
 import com.example.newsfeed.post.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import static com.example.newsfeed.post.entity.SearchType.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,14 +34,17 @@ public class SearchController {
         SearchType searchType = ALL;
         String query = null;
 
-        if(all != null) {
+        if (all != null) {
             query = all;
-        } else if(title != null) {
-            searchType = TITLE; query = title;
+        } else if (title != null) {
+            searchType = TITLE;
+            query = title;
         } else if (contents != null) {
-            searchType = CONTENTS; query = contents;
-        } else if(keywords != null) {
-            searchType = KEYWORDS; query = keywords;
+            searchType = CONTENTS;
+            query = contents;
+        } else if (keywords != null) {
+            searchType = KEYWORDS;
+            query = keywords;
         }
 
         if (query == null) {

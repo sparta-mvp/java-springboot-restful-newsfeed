@@ -8,13 +8,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-
 import lombok.Getter;
 
 @Entity
@@ -37,7 +32,6 @@ public class Friend {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "id")
     private User fromUser;
-
 
 
     public Friend() {

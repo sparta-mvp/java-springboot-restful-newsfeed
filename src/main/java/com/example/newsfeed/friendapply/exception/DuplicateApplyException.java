@@ -4,7 +4,7 @@ import com.example.newsfeed.common.exception.ErrorCode;
 import com.example.newsfeed.common.exception.NewsfeedAppException;
 
 public class DuplicateApplyException extends NewsfeedAppException {
-    public DuplicateApplyException(){
+    public DuplicateApplyException() {
         super(ErrorCode.DUPLICATE_APPLY);
     }
 }

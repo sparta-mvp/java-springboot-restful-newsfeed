@@ -12,7 +12,7 @@ public enum ApplicationStatus {
 
     private String message;
 
-    ApplicationStatus(String message){
+    ApplicationStatus(String message) {
         this.message = message;
     }
 

@@ -4,7 +4,7 @@ import com.example.newsfeed.common.exception.ErrorCode;
 import com.example.newsfeed.common.exception.NewsfeedAppException;
 
 public class UserNotFoundException extends NewsfeedAppException {
-    public UserNotFoundException( ) {
+    public UserNotFoundException() {
         super(ErrorCode.MEMBER_NOT_FOUND);
     }
 }

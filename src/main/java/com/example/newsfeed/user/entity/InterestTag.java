@@ -2,7 +2,6 @@ package com.example.newsfeed.user.entity;
 
 import com.example.newsfeed.common.exception.ErrorCode;
 import com.example.newsfeed.common.exception.ValidationException;
-
 import java.util.Arrays;
 
 public enum InterestTag {

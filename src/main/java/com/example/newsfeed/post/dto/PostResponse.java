@@ -1,9 +1,8 @@
 package com.example.newsfeed.post.dto;
 
 import com.example.newsfeed.post.entity.Post;
-import lombok.Getter;
-
 import java.time.LocalDateTime;
+import lombok.Getter;
 
 @Getter
 public class PostResponse {

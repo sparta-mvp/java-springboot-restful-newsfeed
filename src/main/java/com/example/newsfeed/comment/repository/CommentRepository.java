@@ -13,8 +13,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     boolean existsById(Long id);
 
-    boolean existsByPostId(Long postId);
-
     void deleteById(Long id);
 
     @Query("select c from Comment c join fetch c.post p join fetch c.user u where p.id = :postId")

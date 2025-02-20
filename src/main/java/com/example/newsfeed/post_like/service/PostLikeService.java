@@ -11,10 +11,9 @@ import com.example.newsfeed.post_like.exception.UnCheckedException;
 import com.example.newsfeed.post_like.repository.PostLikeRepository;
 import com.example.newsfeed.user.entity.User;
 import com.example.newsfeed.user.service.component.UserFinder;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,14 +28,16 @@ public class PostLikeService {
 
         // 중복 여부 확인
         Optional<PostLike> existing = postLikeRepository.findByPostAndUser(post, user);
-        if(existing.isPresent()) { throw new AlreadyLikedException(); }
+        if (existing.isPresent()) {
+            throw new AlreadyLikedException();
+        }
 
-        if(post.getUser().equals(user)) throw new ValidationException(ErrorCode.SELF_POST_LIKE_NOT_ALLOWED);
+        if (post.getUser().equals(user)) throw new ValidationException(ErrorCode.SELF_POST_LIKE_NOT_ALLOWED);
 
         postLikeRepository.save(new PostLike(post, user));
     }
 
-    public void unlikePost(LoginUser loginUser, Long postId){
+    public void unlikePost(LoginUser loginUser, Long postId) {
         Post post = postFinder.findPost(postId);
         User user = userFinder.findActive(loginUser.getUserId());
 

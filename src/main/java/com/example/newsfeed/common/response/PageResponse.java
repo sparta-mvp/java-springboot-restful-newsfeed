@@ -1,11 +1,10 @@
 package com.example.newsfeed.common.response;
 
+import java.util.List;
 import lombok.Getter;
 
-import java.util.List;
-
 @Getter
-public class PageResponse<T> implements Response<T>{
+public class PageResponse<T> implements Response<T> {
 
     private final List<T> data;
     private final int pageNumber;

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class CommentLikeReader {
     private final CommentLikeRepository commentLikeRepository;
+
     public boolean existsByCommentIdAndUserId(Long commentId, Long userId) {
         return commentLikeRepository.existsByCommentIdAndUserId(commentId, userId);
     }

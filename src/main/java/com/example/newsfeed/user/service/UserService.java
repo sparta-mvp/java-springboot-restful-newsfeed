@@ -3,11 +3,12 @@ package com.example.newsfeed.user.service;
 import com.example.newsfeed.auth.dto.LoginUser;
 import com.example.newsfeed.common.config.PasswordEncoder;
 import com.example.newsfeed.common.exception.ErrorCode;
+import static com.example.newsfeed.common.exception.ErrorCode.PASSWORD_CHECK_MISMATCH;
 import com.example.newsfeed.common.exception.ValidationException;
 import com.example.newsfeed.user.dto.PasswordUpdateRequest;
 import com.example.newsfeed.user.dto.SignupRequest;
-import com.example.newsfeed.user.dto.UserResponse;
 import com.example.newsfeed.user.dto.UserRequest;
+import com.example.newsfeed.user.dto.UserResponse;
 import com.example.newsfeed.user.entity.InterestTag;
 import com.example.newsfeed.user.entity.User;
 import com.example.newsfeed.user.exception.DuplicateUserException;
@@ -19,8 +20,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
-import static com.example.newsfeed.common.exception.ErrorCode.PASSWORD_CHECK_MISMATCH;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +38,7 @@ public class UserService {
 
         InterestTag interestTag = InterestTag.of(requestDto.getInterestTag());
 
-        if (userReader.exists(requestDto.getEmail())){
+        if (userReader.exists(requestDto.getEmail())) {
             throw new DuplicateUserException();
         }
 
@@ -51,7 +50,7 @@ public class UserService {
     }
 
     @Transactional
-    public void withdraw(LoginUser loginUser,  String password) {
+    public void withdraw(LoginUser loginUser, String password) {
         User user = userFinder.findActive(loginUser.getUserId());
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
@@ -114,7 +113,7 @@ public class UserService {
     }
 
     private void validateNotSameAsOldPassword(String password, String encodedPassword) {
-        if (passwordEncoder.matches(password,encodedPassword)) {
+        if (passwordEncoder.matches(password, encodedPassword)) {
             throw new ValidationException(ErrorCode.SAME_PASSWORD);
         }
     }

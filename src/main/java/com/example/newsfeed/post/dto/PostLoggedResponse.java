@@ -1,9 +1,8 @@
 package com.example.newsfeed.post.dto;
 
 import com.example.newsfeed.post.entity.Post;
-import lombok.Getter;
-
 import java.time.LocalDateTime;
+import lombok.Getter;
 
 @Getter
 public class PostLoggedResponse {
@@ -17,7 +16,7 @@ public class PostLoggedResponse {
     private final boolean isChecked;
 
     public PostLoggedResponse(String title, String contents, String memberName, String keywords,
-                        LocalDateTime createdAt, LocalDateTime updatedAt, long likeCnt, boolean isChecked) {
+                              LocalDateTime createdAt, LocalDateTime updatedAt, long likeCnt, boolean isChecked) {
         this.title = title;
         this.contents = contents;
         this.memberName = memberName;

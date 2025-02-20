@@ -5,7 +5,7 @@ import com.example.newsfeed.common.exception.NewsfeedAppException;
 
 public class InvalidPasswordException extends NewsfeedAppException {
 
-    public InvalidPasswordException( ) {
+    public InvalidPasswordException() {
         super(ErrorCode.INVALID_PASSWORD);
     }
 }

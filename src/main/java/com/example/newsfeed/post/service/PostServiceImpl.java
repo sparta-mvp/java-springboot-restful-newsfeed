@@ -2,6 +2,7 @@ package com.example.newsfeed.post.service;
 
 import com.example.newsfeed.bookmark.service.component.BookmarkWriter;
 import com.example.newsfeed.comment.service.component.CommentWriter;
+import static com.example.newsfeed.common.exception.ErrorCode.*;
 import com.example.newsfeed.common.exception.ValidationException;
 import com.example.newsfeed.post.dto.PostResponse;
 import com.example.newsfeed.post.dto.PostShortResponse;
@@ -14,16 +15,13 @@ import com.example.newsfeed.post_like.service.component.PostLikeReader;
 import com.example.newsfeed.user.entity.User;
 import com.example.newsfeed.user.service.component.UserFinder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-
-import static com.example.newsfeed.common.exception.ErrorCode.*;
 
 
 @Service
@@ -71,7 +69,7 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public Page<PostShortResponse> findAllWithLikeSorted(int pageSize, int pageNumber) {
-        if(pageSize<1) throw new ValidationException(PAGE_NOT_POSITIVE);
+        if (pageSize < 1) throw new ValidationException(PAGE_NOT_POSITIVE);
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return postFinder.findAllWithLikeSorted(pageable);
     }
@@ -79,7 +77,7 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public PostResponse findPostById(Long id) {
-        if(!postReader.doesExist(id)){
+        if (!postReader.doesExist(id)) {
             throw new ValidationException(POST_NOT_FOUND);
         }
 
@@ -92,14 +90,14 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public PostResponse update(Long userId, Long id, String title, String contents, String keyword) {
-        if(!postReader.doesExist(id)) throw new ValidationException(POST_NOT_FOUND);
+        if (!postReader.doesExist(id)) throw new ValidationException(POST_NOT_FOUND);
 
         if (title == null || contents == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 
         Post post = postFinder.findPost(id);
         User writer = userFinder.findActive(userId);
 
-        if(!post.getUser().equals(writer)) throw new ValidationException(UNAUTHORIZED_ACCESS);
+        if (!post.getUser().equals(writer)) throw new ValidationException(UNAUTHORIZED_ACCESS);
 
         post.updatePost(title, contents, keyword);
 
@@ -113,7 +111,7 @@ public class PostServiceImpl implements PostService {
     public void delete(Long userId, Long id) {
         Post post = postFinder.findPost(id);
 
-        if(!post.getUser().equals(userFinder.findActive(userId))) {
+        if (!post.getUser().equals(userFinder.findActive(userId))) {
             throw new ValidationException(UNAUTHORIZED_ACCESS);
         }
 
@@ -129,13 +127,13 @@ public class PostServiceImpl implements PostService {
 
         Page<Post> postPage = null;
 
-        if(searchType.equals(SearchType.ALL)) {
+        if (searchType.equals(SearchType.ALL)) {
             postPage = postFinder.searchPosts(pageable, query);
         } else if (searchType.equals(SearchType.TITLE)) {
             postPage = postFinder.searchPostsWithTitle(pageable, query);
-        } else if(searchType.equals(SearchType.CONTENTS)) {
+        } else if (searchType.equals(SearchType.CONTENTS)) {
             postPage = postFinder.searchPostsWithContents(pageable, query);
-        } else if(searchType.equals(SearchType.KEYWORDS)) {
+        } else if (searchType.equals(SearchType.KEYWORDS)) {
             postPage = postFinder.searchPostsWithKeyWords(pageable, query);
         }
 
