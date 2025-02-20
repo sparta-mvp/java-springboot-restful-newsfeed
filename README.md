@@ -1,19 +1,30 @@
 # 기초 프로젝트: 뉴스 피드 앱 만들기
-[팀 노션 링크](https://www.notion.so/teamsparta/1-MVP-19a2dc3ef5148081ad2edcbe774baa60) <br><br>
-#### 트러블 슈팅
-[Global Exception Handler에서 Enum 사용하기](https://rvrlo.tistory.com/entry/Spring-Global-Exception-Handler%EC%97%90%EC%84%9C-Enum-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0)
-
-[try-catch에서 SQLException이 잡아지지 않을 때 해결](https://rvrlo.tistory.com/entry/Spring-try-catch%EC%97%90%EC%84%9C-SQLException%EC%9D%B4-%EC%9E%A1%EC%95%84%EC%A7%80%EC%A7%80-%EC%95%8A%EC%9D%84-%EB%95%8C-%ED%95%B4%EA%B2%B0)
-
-[Enum에 i18n 적용하는 방법](https://rvrlo.tistory.com/entry/Spring-Enum%EC%97%90-i18n-%EC%A0%81%EC%9A%A9%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95)
+[팀 노션 링크](https://www.notion.so/teamsparta/1-MVP-19a2dc3ef5148081ad2edcbe774baa60)
 
 <br><br>
+
+#### 개발 환경
+1. 프로젝트 기간: 2025.02.14 - 2025.02.20
+2. 사용 기술: JAVA, SpringBoot, JPA, Spring Data JPA, MySQL
+
+<br><br>
+
+#### 역할 분담
+🦦 [juno-soodal](https://github.com/juno-soodal) : user crud, 인증/인가, 공통 로직 처리, comment like<p>
+🤡 [mmj-159](https://github.com/mmj-159) : bookmark<p>
+👻 [SuhyeonB](https://github.com/SuhyeonB) : post crud, post like<p>
+🍊 [euuns](https://github.com/euuns) : comment crud, friend, friend-apply
+
+
+<br><br><br>
 
 ## 목차
 [1. API 명세서 작성](#api-명세서) <br>
 [2. ERD 작성](#erd) <br>
 [3. SQL 작성](#sql) <br>
 [4. 요청 및 응답](#dto) <br>
+[5. 트러블 슈팅](#troubleshooting) <br>
+[6. 예외 처리](#exception) <br>
 
 <br><br><br>
 
@@ -21,32 +32,6 @@
 
 ### API 명세서
 ![API 명세서](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FkSXBU%2FbtsMekkA8es%2FL4HqsOKfnK95URwxUSrvc1%2Fimg.png)
-
-<br>
-
-👤 User
- - 회원가입 : POST - /user/signup
- - 로그인 : POST - /user/login
- - 조회 : GET - /user/{id}
- - 수정 : PUT - /user/{id}
- - 삭제 : DELETE - /user/{id}
-
-<br>
-
-📑 Schedule
- - 등록 : POST - /schedule
- - 전체 조회 : GET - /schedule
- - 선택 조회 : GET - /schedule/{id}
- - 수정 : PUT - /schedule/{id}
- - 삭제 : DELETE - /schedule/{id}
-
-<br>
-
-🏷️ Comment
- - 등록 : POST - /schedule/{id}
- - 조회 : GET - /schedule/{id}/comment
- - 수정 : PUT - /schedule/{id}/comment/{id}
- - 삭제 : DELETE - /schedule/{id}/comment/{id}
 
 <br>
 
@@ -121,6 +106,20 @@ CREATE TABLE comment
 );
 ```
 
+<br>
+
+👥 Friends
+```sql
+작성
+```
+
+<br>
+
+🔖 Bookmarks
+```sql
+작성
+```
+
 <br><br><hr><br>
 
 ### DTO
@@ -130,12 +129,10 @@ CREATE TABLE comment
 👤 User <p>
 ![image](https://github.com/user-attachments/assets/2174523c-9f0d-4760-a242-b439e03c9344)
 
-
 <br>
 
 📑 Schedule <p>
 ![image](https://github.com/user-attachments/assets/130ca238-a075-4730-84e7-36f2271f553a)
-
 
 <br>
 
@@ -144,10 +141,36 @@ CREATE TABLE comment
 
 <br>
 
+👥 Friends <p>
+![image](https://github.com/user-attachments/assets/ae29ba35-96e1-40e0-98fb-ead935ee6d3b)
+
+<br>
+
+🔖 Bookmarks <p>
+![image](https://github.com/user-attachments/assets/ae29ba35-96e1-40e0-98fb-ead935ee6d3b)
+
+<br><br>
+
 ☑️ headers-session: password를 대신해 유저 정보를 확인해줄 인증 수단<p>
 　　user의 path-id : user의 PK<br>
 　　schedule의 path-id : schedule의 PK → comment에서 FK로 사용<br>
 　　comment의 path-id : comment의 PK<br>
 
+
+<br><br><hr><br>
+
+### troubleshooting
+
+<br>
+
+작성
+
+<br><br><hr><br>
+
+### exception
+
+<br>
+
+작성
 
 <br><br>
