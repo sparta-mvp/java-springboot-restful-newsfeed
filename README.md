@@ -31,7 +31,11 @@
 ## 설계
 
 ### API 명세서
-![API 명세서](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FkSXBU%2FbtsMekkA8es%2FL4HqsOKfnK95URwxUSrvc1%2Fimg.png)
+![image](https://github.com/user-attachments/assets/3c39d957-0d78-44ae-bcd0-3af544adfc8c)
+![image](https://github.com/user-attachments/assets/69b832df-0fbc-4dc2-b835-370827bdf61d)
+![image](https://github.com/user-attachments/assets/aa5ffad6-7e60-43a8-9919-110ce3217d42)
+![image](https://github.com/user-attachments/assets/e654c554-c103-4fc6-a99a-15a07551fc72)
+
 
 <br>
 
@@ -45,15 +49,18 @@
 <br><br><hr><br>
 
 ### ERD
-![ERD]<img width="962" alt="Image" src="https://github.com/user-attachments/assets/b39cad0a-83d5-455a-995a-6854148f5c26" />
+![image](https://github.com/user-attachments/assets/c04a30c6-b2ba-480c-af43-610bd91030ce)
+
 
 <br>
 
-✅ user와 schedule은 1:N 관계
+✅ user와 post는 1:N 관계
+✅ like, bookmark는 user:post의 N:M 관계
 
-✅ comment는 user와 schedule에 N:1 관계<br>
-　　→  user 1 : N comment<br>
-　　→  schedule 1 : N comment<br>
+✅ post와 comment는 1:N 관계
+✅ comment_like는 post:comment의 N:M 관계
+<br>
+　　→  N:M 관계는 관계 테이블 → entity로 구현<br>
 
 <br><br><hr><br>
 
@@ -62,70 +69,120 @@
 
 👤 User
 ```sql
-CREATE TABLE user
-(
-	id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(10) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(20) NOT NULL,
-    created_date DATE NOT NULL,
-    modified_date DATE
+CREATE TABLE user (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    interest_tag VARCHAR(255) NOT NULL,
+    status VARCHAR(50) DEFAULT 'ACTIVE',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
 );
 ```
 
 <br>
 
-📑 Schedule
+📄 post
 ```sql
-CREATE TABLE schedule
-(
-	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE post (
+    id BIGINT NOT NULL AUTO_INCREMENT,
     user_id BIGINT NOT NULL,
-    title VARCHAR(30) NOT NULL,
-    contents VARCHAR(500),
-    created_date DATE NOT NULL,
-    modified_date DATE,
-    FOREIGN KEY (user_id) REFERENCES user(id)
+    title VARCHAR(255) NOT NULL,
+    contents LONGTEXT NOT NULL,
+    keyword VARCHAR(255),
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_post_user FOREIGN KEY (user_id) REFERENCES user(id)
 );
 ```
 
 <br>
 
-🏷️ Comment
+❤ post_like
 ```sql
-CREATE TABLE comment
-(
-	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE post_like (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    post_id BIGINT NOT NULL,
     user_id BIGINT NOT NULL,
-    schedule_id BIGINT NOT NULL,
-    contents VARCHAR(100) NOT NULL,
-    created_date DATE NOT NULL,
-    modified_date DATE,
-    FOREIGN KEY (user_id) REFERENCES user(id),
-    FOREIGN KEY (schedule_id) REFERENCES schedule(id)
+    CONSTRAINT unique_post_user UNIQUE (post_id, user_id),
+    CONSTRAINT fk_post_like_post FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE,
+    CONSTRAINT fk_post_like_user FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 );
 ```
 
 <br>
 
+📑 Comment
+```sql
+CREATE TABLE comment (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    post_id BIGINT NOT NULL,
+    contents TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_comment_user FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+    CONSTRAINT fk_comment_post FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE
+);
+```
+
+<br>
+
+💙 Comment_like
+```sql
+CREATE TABLE comment_like (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    comment_id BIGINT NOT NULL,
+    CONSTRAINT unique_comment_user UNIQUE (user_id, comment_id),
+    CONSTRAINT fk_comment_like_user FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+    CONSTRAINT fk_comment_like_comment FOREIGN KEY (comment_id) REFERENCES comment(id) ON DELETE CASCADE
+);
+```
+
+<br>
+
+💌 apply
+```sql
+CREATE TABLE apply (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    sender_id BIGINT NOT NULL,
+    receiver_id BIGINT NOT NULL,
+    CONSTRAINT friend_apply UNIQUE (sender_id, receiver_id),
+    CONSTRAINT fk_apply_sender FOREIGN KEY (sender_id) REFERENCES user(id) ON DELETE CASCADE,
+    CONSTRAINT fk_apply_receiver FOREIGN KEY (receiver_id) REFERENCES user(id) ON DELETE CASCADE
+);
+```
+
+<br>
 👥 Friends
 ```sql
-작성
+CREATE TABLE friend (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    to_user_id BIGINT NOT NULL,
+    from_user_id BIGINT NOT NULL,
+    CONSTRAINT unique_friend UNIQUE (to_user_id, from_user_id),
+    CONSTRAINT fk_friend_to_user FOREIGN KEY (to_user_id) REFERENCES user(id) ON DELETE CASCADE,
+    CONSTRAINT fk_friend_from_user FOREIGN KEY (from_user_id) REFERENCES user(id) ON DELETE CASCADE
+);
 ```
 
 <br>
 
 🔖 Bookmarks
 ```sql
-CREATE TABLE bookmark
-(
-    bookmark_id      bigint auto_increment primary key,
-    bookmark_post_id bigint      not null,
-    bookmark_user_id bigint      not null,
-    created_at       datetime(6) null,
-    updated_at       datetime(6) null,
-    FOREIGN KEY (user_id) REFERENCES user(id),
-    FOREIGN KEY (post_id) REFERENCES post(id)
+CREATE TABLE bookmark (
+    bookmark_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    bookmark_user_id BIGINT NOT NULL,
+    bookmark_post_id BIGINT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_bookmark_user FOREIGN KEY (bookmark_user_id) REFERENCES user(id) ON DELETE CASCADE,
+    CONSTRAINT fk_bookmark_post FOREIGN KEY (bookmark_post_id) REFERENCES post(id) ON DELETE CASCADE
+);
 ```
 
 <br><br><hr><br>
