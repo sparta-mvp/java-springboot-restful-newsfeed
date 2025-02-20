@@ -1,4 +1,4 @@
-# 기초 프로젝트: 뉴스 피드 앱 만들기
+# 3CH 기초 프로젝트: 뉴스 피드 앱 만들기
 [팀 노션 링크](https://www.notion.so/teamsparta/1-MVP-19a2dc3ef5148081ad2edcbe774baa60)
 
 <br><br>
@@ -19,21 +19,45 @@
 <br><br><br>
 
 ## 목차
-[1. API 명세서 작성](#api-명세서) <br>
+[1. API 및 기능 명세서](#api-및-기능-명세서) <br>
 [2. ERD 작성](#erd) <br>
-[3. SQL 작성](#sql) <br>
-[4. 요청 및 응답](#dto) <br>
-[5. 트러블 슈팅](#troubleshooting) <br>
-[6. 예외 처리](#exception) <br>
+[3. 트러블 슈팅](#troubleshooting) <br>
+[4. 예외 처리](#exception) <br>
 
 <br><br><br>
 
 ## 설계
 
-### API 명세서
-![API 명세서](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FkSXBU%2FbtsMekkA8es%2FL4HqsOKfnK95URwxUSrvc1%2Fimg.png)
-
+### API 및 기능 명세서
 <br>
+
+#### 👤 Users
+![users1](https://github.com/user-attachments/assets/95c9a833-75a3-42cf-8ac7-2405bdd7073e)
+![users2](https://github.com/user-attachments/assets/fac660c0-e820-4d0b-a342-69506b341e1d)
+
+<br><br>
+
+#### 📑 Posts
+![posts1](https://github.com/user-attachments/assets/c38f05c7-a7e0-4a97-8bd9-195d7f1c327c)
+![posts2](https://github.com/user-attachments/assets/6d55c677-23d7-4648-85ab-3dfc57d5f904)
+
+<br><br>
+
+#### 🏷️ Comments
+![comments](https://github.com/user-attachments/assets/2f01f057-6222-4cb6-8641-1d2d99ba178a)
+
+<br><br>
+
+#### 👥 Friends
+![friends1](https://github.com/user-attachments/assets/5ecb660b-2ad7-4e7b-b22d-c8a5e5c6c4f2)
+![friedns2](https://github.com/user-attachments/assets/68ef93df-cf92-4339-8b42-76c872740a9a)
+
+<br><br>
+
+#### 🔖 Bookmarks
+![bookmarks](https://github.com/user-attachments/assets/cdd31ffe-bf8d-4f25-a545-0f1c94ff3ef9)
+
+<br><br>
 
 🔐 인증/인가: Session
 
@@ -45,117 +69,7 @@
 <br><br><hr><br>
 
 ### ERD
-![ERD]<img width="962" alt="Image" src="https://github.com/user-attachments/assets/b39cad0a-83d5-455a-995a-6854148f5c26" />
-
-<br>
-
-✅ user와 schedule은 1:N 관계
-
-✅ comment는 user와 schedule에 N:1 관계<br>
-　　→  user 1 : N comment<br>
-　　→  schedule 1 : N comment<br>
-
-<br><br><hr><br>
-
-
-### SQL
-
-👤 User
-```sql
-CREATE TABLE user
-(
-	id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(10) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(20) NOT NULL,
-    created_date DATE NOT NULL,
-    modified_date DATE
-);
-```
-
-<br>
-
-📑 Schedule
-```sql
-CREATE TABLE schedule
-(
-	id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id BIGINT NOT NULL,
-    title VARCHAR(30) NOT NULL,
-    contents VARCHAR(500),
-    created_date DATE NOT NULL,
-    modified_date DATE,
-    FOREIGN KEY (user_id) REFERENCES user(id)
-);
-```
-
-<br>
-
-🏷️ Comment
-```sql
-CREATE TABLE comment
-(
-	id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id BIGINT NOT NULL,
-    schedule_id BIGINT NOT NULL,
-    contents VARCHAR(100) NOT NULL,
-    created_date DATE NOT NULL,
-    modified_date DATE,
-    FOREIGN KEY (user_id) REFERENCES user(id),
-    FOREIGN KEY (schedule_id) REFERENCES schedule(id)
-);
-```
-
-<br>
-
-👥 Friends
-```sql
-작성
-```
-
-<br>
-
-🔖 Bookmarks
-```sql
-작성
-```
-
-<br><br><hr><br>
-
-### DTO
-
-<br>
-
-👤 User <p>
-![image](https://github.com/user-attachments/assets/2174523c-9f0d-4760-a242-b439e03c9344)
-
-<br>
-
-📑 Schedule <p>
-![image](https://github.com/user-attachments/assets/130ca238-a075-4730-84e7-36f2271f553a)
-
-<br>
-
-🏷️ Comment <p>
-![image](https://github.com/user-attachments/assets/ae29ba35-96e1-40e0-98fb-ead935ee6d3b)
-
-<br>
-
-👥 Friends <p>
-![image](https://github.com/user-attachments/assets/ae29ba35-96e1-40e0-98fb-ead935ee6d3b)
-
-<br>
-
-🔖 Bookmarks <p>
-![image](https://github.com/user-attachments/assets/ae29ba35-96e1-40e0-98fb-ead935ee6d3b)
-
-<br><br>
-
-☑️ headers-session: password를 대신해 유저 정보를 확인해줄 인증 수단<p>
-　　user의 path-id : user의 PK<br>
-　　schedule의 path-id : schedule의 PK → comment에서 FK로 사용<br>
-　　comment의 path-id : comment의 PK<br>
-
+<img width="962" alt="Image" src="https://github.com/user-attachments/assets/b39cad0a-83d5-455a-995a-6854148f5c26" />
 
 <br><br><hr><br>
 
@@ -163,7 +77,36 @@ CREATE TABLE comment
 
 <br>
 
-작성
+![image](https://github.com/user-attachments/assets/a1d4ef32-2fb4-4b59-8d39-c20bd4694018)
+
+<br><br>
+
+🔎 상황 <p>
+댓글 목록 조회 시 작성자(User)와 게시글 제목(Post) 정보를 함께 반환.<br>
+Comment entity에서 User와 Post를 @ManyToOne(fetch = FetchType.LAZY)로 설정.<br>
+CommentResponseDto에서 getUser().getName() 또는 getPost().getTitle()을 호출하면 추가 쿼리가 발생<br>
+
+<br><br>
+
+💥 N+1 문제 발생 <p>
+1개 쿼리 후 추가적으로 N개의 쿼리가 발생하는 비효율적인 데이터 조회 문제 <br>
+
+<br><br>
+
+🚀 JOIN FETCH 활용으로 해결<p>
+
+<br>
+
+![image](https://github.com/user-attachments/assets/dfe5274b-66ab-4484-86a6-9c812b43f4ec)
+
+<br>
+
+✅ JOIN FETCH가 적용된 후,<p>
+findCommentsWithPostAndUserByPostId() 실행 시<br>
+Comment 엔티티를 조회하면서 즉시 User와 Post 객체를 함께 호출<br>
+<br>
+따라서 proxy 객체가 아니라 실제 entity 로드<br>
+추가적인 LazyInitializationException 없이 getUser().getName() 안전하게 호출 가능
 
 <br><br><hr><br>
 
@@ -171,6 +114,12 @@ CREATE TABLE comment
 
 <br>
 
-작성
+![image](https://github.com/user-attachments/assets/9c393839-5e0e-41d2-961a-41c73f28b658)
+
+🎯 common/exception/ErrorCode.java
+
+<br>
+
+_※ 모든 예외가 아닌 일부 예외 작성_
 
 <br><br>
