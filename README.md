@@ -45,7 +45,7 @@
 <br><br><hr><br>
 
 ### ERD
-![ERD](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fcvbm9q%2FbtsMchgg6bk%2F1kCsOqJGNCtsMUpozjoYTk%2Fimg.png)
+![ERD]<img width="962" alt="Image" src="https://github.com/user-attachments/assets/b39cad0a-83d5-455a-995a-6854148f5c26" />
 
 <br>
 
